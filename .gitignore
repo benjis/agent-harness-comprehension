@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+.pi/comprehension/
+*.log
+.DS_Store
+
