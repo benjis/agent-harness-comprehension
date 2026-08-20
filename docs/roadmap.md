@@ -41,7 +41,7 @@ Gate 1 is closed as failed. Its required exit conditions were not met:
 
 The bounded natural-prevalence redesign allowance has been consumed. Do not add more natural runtime tasks or capture tuning. The separately pre-registered hybrid pilot below permits only its two controlled conditional-value tasks.
 
-## Active gate: hybrid conditional-value formative workflow
+## Stopped gate: hybrid conditional-value formative workflow
 
 Completed before reviewer access:
 
@@ -52,13 +52,19 @@ Completed before reviewer access:
 - public packet order is `P02` then `P01`; neither packet contains raw ledgers, intervention prompts, hidden tests, private rubrics, or the key;
 - all preparation failures and costs are retained in the external run record.
 
+Observed reviewer stop:
+
+- P02 opened 9 files, elapsed 1,420 seconds, and timed out at the 1,200-second cap;
+- cognitive load was 7/7 and no reliable approve/reject decision was possible;
+- serial chat access prevented persistent source context, side-by-side comparison, and normal editor navigation;
+- P01 was not started and the condition key remains closed, so the failure cannot be attributed to either masked content condition.
+
 Next:
 
-- start `P02` only after the user explicitly begins the reviewer workflow;
-- complete the user-started condition-masked review sessions only after both packets pass integrity;
-- freeze answers and initial scores before opening the researcher key;
-- report timing, files opened, correctness, confidence, cognitive load, artifact defects, and protocol deviations;
-- publish the result as formative and causally uninterpretable.
+- do not continue P01 under the known-broken interface;
+- if reviewer work continues, pre-register a new interface protocol that records navigation without removing normal editor affordances;
+- do not reuse P02 or P01 as fresh observations after redesign;
+- report the current result as a formative workflow failure, not a treatment result.
 
 The output may justify another research iteration, narrow the capture mechanism, reveal a pivot, or expose a stop condition. It cannot establish that R outperforms P or O.
 

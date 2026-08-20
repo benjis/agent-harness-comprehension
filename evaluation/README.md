@@ -136,7 +136,9 @@ evaluation/bin/study hybrid-formative \
 
 Keep `researcher-key.json`, run directories, raw ledgers, intervention prompts, hidden-test outputs, and rubrics closed until both reviewer answers and initial scores are frozen.
 
-Recorded result on 2026-08-20: both implementations, visible/hidden tests, artifact registrations, exhaustive audits, and all aggregate gate checks passed. The assignment froze public order `P02` then `P01`; no reviewer session was started. External cost accounting retains 40 model calls, 228,818 reported tokens, about US$0.4683, two artifact-context retries, two audit-policy retries, and three no-model-cost researcher verification failures.
+Recorded preparation result on 2026-08-20: both implementations, visible/hidden tests, artifact registrations, exhaustive audits, and all aggregate gate checks passed. The assignment froze public order `P02` then `P01`. External cost accounting retains 40 model calls, 228,818 reported tokens, about US$0.4683, two artifact-context retries, two audit-policy retries, and four no-model-cost researcher verification failures.
+
+Reviewer update: P02 subsequently opened 9 files and ended after 1,420 elapsed seconds, capped at 1,200 seconds with `timed_out: true`, cognitive load 7/7, and no reliable review decision. Chat-mediated file access was the blocking defect. P01 was not started and the condition key remains closed; do not continue the current reviewer workflow or attribute this failure to either masked content condition.
 
 ## Historical three-condition assignment
 

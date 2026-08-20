@@ -4,7 +4,7 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: hybrid conditional-value packets frozen; reviewer not started.** Both controlled runs, exhaustive audits, and the hybrid gate passed. One masked post-hoc packet and one masked hybrid packet are ready in frozen public order `P02` then `P01`. The next action is the user's explicit start of the first reviewer session; no session has begun.
+> **Current status: hybrid reviewer workflow stopped at P02.** The artifact gate passed, but the first masked review timed out and ended without a reliable review decision because chat-mediated file access prevented persistent navigation and side-by-side source comparison. P01 was not started and the researcher key remains closed.
 
 ## Current research step
 
@@ -18,7 +18,7 @@ The superseded runtime study used three matched conditions:
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. Two condition-masked pilot packets are now frozen: one post-hoc base and one post-hoc base with a runtime-unique addendum. The two controlled trajectories test conditional usability only, not natural occurrence. Start `P02` only when the user explicitly begins the reviewer workflow; keep the researcher key closed until both answers and initial scores are frozen.
+Only one reviewer is currently available. P02 opened 9 files, elapsed 1,420 seconds, hit the 1,200-second cap, recorded cognitive load 7/7, and produced no reliable approve/reject decision. This is a workflow result, not evidence for either masked condition. Do not start P01 or open the researcher key under the current interface.
 
 ## What exists
 
