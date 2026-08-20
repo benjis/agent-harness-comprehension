@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "instrument_version": "instrument-v2",
+  "task_id": "nontrivial-idempotent-dispatch",
+  "artificial_positive_control": true,
+  "prompt_versions": {
+    "implementation": "trajectory-positive-control-v1",
+    "closure": "closure-v2"
+  },
+  "closure": {
+    "attempted": true,
+    "event_ids": ["sem-goal", "sem-decision", "sem-invariant", "sem-validation"],
+    "source_modified": false,
+    "final_state_support": "supported",
+    "failure_codes": []
+  },
+  "positive_control": {
+    "initial_hypothesis_event_id": "sem-hypothesis",
+    "failure_event_id": "sem-failure",
+    "revision_event_id": "sem-revision",
+    "expected_test_failed": true,
+    "final_visible_tests_passed": true
+  }
+}

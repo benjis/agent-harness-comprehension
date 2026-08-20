@@ -69,6 +69,53 @@ class GuidesAndPacketsTest < Minitest::Test
     end
   end
 
+  def test_diagnostic_gate_separates_closure_and_positive_control_without_granting_eligibility
+    Dir.mktmpdir("comprehension-diagnostic-") do |directory|
+      run, inputs = create_awaiting_run(directory, "nontrivial-idempotent-dispatch", "non-trivial", 0)
+      events = [
+        event("e1", "goal"),
+        event("e2", "hypothesis"),
+        event("e3", "failure"),
+        event("e4", "revision", "supersedes" => ["e2"]),
+        event("e5", "decision"),
+        event("e6", "invariant"),
+        event("e7", "validation")
+      ]
+      File.write(
+        File.join(run, "research", "runtime-events.jsonl"),
+        events.map { |entry| JSON.generate(entry) }.join("\n") + "\n"
+      )
+      runtime = read_json(inputs.fetch(:runtime))
+      runtime.fetch("claims").first["evidence"] = %w[e2 e3 e4].map do |id|
+        { "source" => "runtime:#{id}", "locator" => "positive-control trajectory" }
+      end
+      ComprehensionStudy::JsonFile.write(inputs.fetch(:runtime), runtime)
+
+      ComprehensionStudy::ArtifactPipeline.new.register(run: run, **inputs)
+      audit = audit_document("nontrivial-idempotent-dispatch", include_history: true, runtime_unique: true)
+      audit_path = write_json(directory, "audit.json", audit)
+      ComprehensionStudy::ClaimAuditor.new.register(run: run, audit: audit_path)
+      registration = write_json(directory, "registration.json", diagnostic_registration)
+      destination = File.join(directory, "diagnostic.json")
+
+      report = ComprehensionStudy::DiagnosticGate.new.evaluate(
+        run: run, registration: registration, destination: destination
+      )
+
+      assert report.fetch("passed")
+      assert report.dig("gate_a", "passed")
+      assert report.dig("gate_b", "passed")
+      record = read_json(File.join(run, "run.json"))
+      assert_equal "audit-complete", record.fetch("trial_status")
+      refute record.dig("diagnostic_gate", "reviewer_eligible")
+      assert_raises(ArgumentError) do
+        ComprehensionStudy::PacketBuilder.new.build(
+          run: run, destination: File.join(directory, "packet"), packet_id: "diagnostic", condition: "runtime"
+        )
+      end
+    end
+  end
+
   def test_audit_rejects_an_omitted_claim
     Dir.mktmpdir("comprehension-audit-") do |directory|
       run, inputs = create_awaiting_run(directory, "small-validation", "small", 0)
@@ -197,6 +244,33 @@ class GuidesAndPacketsTest < Minitest::Test
         "capture_failures" => [], "renderer_failures" => [], "prohibited_data_findings" => [],
         "unaccounted_failures" => [], "added_tool_calls" => 0, "added_turns" => 0,
         "capture_tokens" => 0, "capture_wall_time_ms" => 0, "storage_bytes" => 100
+      }
+    }
+  end
+
+  def diagnostic_registration
+    {
+      "schema_version" => 1,
+      "instrument_version" => "instrument-v2",
+      "task_id" => "nontrivial-idempotent-dispatch",
+      "artificial_positive_control" => true,
+      "prompt_versions" => {
+        "implementation" => "trajectory-positive-control-v1",
+        "closure" => "closure-v2"
+      },
+      "closure" => {
+        "attempted" => true,
+        "event_ids" => %w[e1 e5 e6 e7],
+        "source_modified" => false,
+        "final_state_support" => "supported",
+        "failure_codes" => []
+      },
+      "positive_control" => {
+        "initial_hypothesis_event_id" => "e2",
+        "failure_event_id" => "e3",
+        "revision_event_id" => "e4",
+        "expected_test_failed" => true,
+        "final_visible_tests_passed" => true
       }
     }
   end

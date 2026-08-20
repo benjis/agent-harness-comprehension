@@ -487,4 +487,144 @@ module ComprehensionStudy
       { "task_id" => record.fetch("task_id"), "level" => record.fetch("level"), "passed" => checks.values.all?, "checks" => checks }
     end
   end
+
+  class DiagnosticGate
+    EXPECTED_TASK = "nontrivial-idempotent-dispatch"
+    REQUIRED_PROMPTS = {
+      "implementation" => "trajectory-positive-control-v1",
+      "closure" => "closure-v2"
+    }.freeze
+
+    def evaluate(run:, registration:, destination:)
+      raise ArgumentError, "diagnostic report already exists" if File.exist?(destination)
+      record = JsonFile.read(File.join(run, "run.json"))
+      raise ArgumentError, "diagnostic requires a completed claim audit" unless record.fetch("trial_status") == "audit-complete"
+      raise ArgumentError, "diagnostic may only be registered once" if record.key?("diagnostic_gate")
+      data = JsonFile.read(registration)
+      validate_registration!(data, record)
+
+      events = File.readlines(File.join(run, "research", "runtime-events.jsonl"), chomp: true)
+        .reject(&:empty?).map { |line| JSON.parse(line) }
+      semantic = events.select { |event| event["family"] == "semantic" }
+      by_id = semantic.to_h { |event| [event.fetch("id"), event] }
+      audit = JsonFile.read(File.join(run, "research", "artifacts", "claim-audit.json"))
+      runtime = JsonFile.read(File.join(run, "research", "artifacts", "runtime-history.json"))
+
+      closure = data.fetch("closure")
+      closure_events = closure.fetch("event_ids").filter_map { |id| by_id[id] }
+      current_types = current_semantic_types(semantic)
+      gate_a_checks = {
+        "artifact_integrity" => ArtifactIntegrity.new.verify(run),
+        "claim_audit_integrity" => ClaimAuditIntegrity.new.verify(run, record),
+        "closure_attempted" => closure.fetch("attempted"),
+        "closure_did_not_modify_source" => !closure.fetch("source_modified"),
+        "closure_claims_supported_by_final_state" => closure.fetch("final_state_support") == "supported",
+        "no_closure_failures" => closure.fetch("failure_codes").empty?,
+        "closure_event_ids_exist" => closure_events.length == closure.fetch("event_ids").length,
+        "required_semantic_coverage" => %w[goal decision validation].all? { |type| current_types.include?(type) } &&
+          current_types.any? { |type| %w[constraint invariant].include?(type) },
+        "no_pipeline_or_privacy_failures" => no_pipeline_or_privacy_failures?(audit)
+      }
+
+      control = data.fetch("positive_control")
+      hypothesis = by_id[control.fetch("initial_hypothesis_event_id")]
+      failure = by_id[control.fetch("failure_event_id")]
+      revision = by_id[control.fetch("revision_event_id")]
+      ordered = [hypothesis, failure, revision].all? &&
+        [hypothesis, failure, revision].map { |event| semantic.index(event) }.each_cons(2).all? { |left, right| left < right }
+      superseded = revision && Array(revision["supersedes"]).include?(control.fetch("initial_hypothesis_event_id"))
+      trajectory_ids = control.values_at("initial_hypothesis_event_id", "failure_event_id", "revision_event_id")
+      runtime_claim_ids = runtime.fetch("claims").filter_map do |claim|
+        sources = claim.fetch("evidence").map { |entry| entry.fetch("source") }
+        claim.fetch("id") if trajectory_ids.all? { |id| sources.include?("runtime:#{id}") }
+      end
+      runtime_unique = audit.fetch("claims").any? do |claim|
+        runtime_claim_ids.include?(claim.fetch("claim_id")) && claim.fetch("recoverability") == "runtime-unique" &&
+          %w[review-relevant critical].include?(claim.fetch("decision_relevance"))
+      end
+      gate_b_checks = {
+        "initial_attempt_is_hypothesis" => hypothesis&.fetch("type", nil) == "hypothesis",
+        "expected_cross_instance_test_failed" => control.fetch("expected_test_failed") && failure&.fetch("type", nil) == "failure",
+        "revision_follows_failure" => ordered && revision&.fetch("type", nil) == "revision",
+        "revision_supersedes_initial_hypothesis" => superseded,
+        "runtime_claim_cites_complete_trajectory" => !runtime_claim_ids.empty?,
+        "runtime_unique_relevant_claim" => runtime_unique,
+        "final_visible_tests_passed" => control.fetch("final_visible_tests_passed") && record.fetch("visible_tests") == "passed"
+      }
+
+      report = {
+        "schema_version" => 1,
+        "gate" => "instrument-v2-diagnostic",
+        "artificial_positive_control" => true,
+        "task_id" => record.fetch("task_id"),
+        "gate_a" => { "passed" => gate_a_checks.values.all?, "checks" => gate_a_checks },
+        "gate_b" => { "passed" => gate_b_checks.values.all?, "checks" => gate_b_checks }
+      }
+      report["passed"] = report.dig("gate_a", "passed") && report.dig("gate_b", "passed")
+      JsonFile.write(destination, report)
+      record["diagnostic_gate"] = {
+        "schema_version" => 1,
+        "passed" => report.fetch("passed"),
+        "report" => File.expand_path(destination),
+        "reviewer_eligible" => false
+      }
+      JsonFile.write(File.join(run, "run.json"), record)
+      report
+    end
+
+    private
+
+    def validate_registration!(data, record)
+      ArtifactContract.exact_keys!(
+        data,
+        %w[schema_version instrument_version task_id artificial_positive_control prompt_versions closure positive_control],
+        "diagnostic registration"
+      )
+      raise ArgumentError, "diagnostic schema_version must be 1" unless data["schema_version"] == 1
+      raise ArgumentError, "instrument_version must be instrument-v2" unless data["instrument_version"] == "instrument-v2"
+      raise ArgumentError, "diagnostic task must be #{EXPECTED_TASK}" unless data["task_id"] == EXPECTED_TASK && record["task_id"] == EXPECTED_TASK
+      raise ArgumentError, "diagnostic must be marked as an artificial positive control" unless data["artificial_positive_control"] == true
+      ArtifactContract.exact_keys!(data["prompt_versions"], REQUIRED_PROMPTS.keys, "diagnostic prompt versions")
+      raise ArgumentError, "unexpected diagnostic prompt versions" unless data["prompt_versions"] == REQUIRED_PROMPTS
+      ArtifactContract.exact_keys!(
+        data["closure"],
+        %w[attempted event_ids source_modified final_state_support failure_codes],
+        "diagnostic closure"
+      )
+      ArtifactContract.exact_keys!(
+        data["positive_control"],
+        %w[initial_hypothesis_event_id failure_event_id revision_event_id expected_test_failed final_visible_tests_passed],
+        "diagnostic positive control"
+      )
+      closure = data["closure"]
+      raise ArgumentError, "closure event_ids must be unique strings" unless string_array?(closure["event_ids"]) && closure["event_ids"].uniq.length == closure["event_ids"].length
+      raise ArgumentError, "closure failure_codes must be strings" unless string_array?(closure["failure_codes"], allow_empty: true)
+      raise ArgumentError, "closure final_state_support must be supported or unsupported" unless %w[supported unsupported].include?(closure["final_state_support"])
+      %w[attempted source_modified].each { |key| raise ArgumentError, "closure #{key} must be boolean" unless [true, false].include?(closure[key]) }
+      control = data["positive_control"]
+      %w[initial_hypothesis_event_id failure_event_id revision_event_id].each do |key|
+        raise ArgumentError, "#{key} must be a non-empty string" unless control[key].is_a?(String) && !control[key].empty?
+      end
+      %w[expected_test_failed final_visible_tests_passed].each do |key|
+        raise ArgumentError, "#{key} must be boolean" unless [true, false].include?(control[key])
+      end
+    end
+
+    def string_array?(value, allow_empty: false)
+      value.is_a?(Array) && (allow_empty || !value.empty?) && value.all? { |entry| entry.is_a?(String) && !entry.empty? }
+    end
+
+    def current_semantic_types(events)
+      superseded = events.flat_map { |event| Array(event["supersedes"]) }
+      events.reject { |event| %w[refuted superseded].include?(event["status"]) || superseded.include?(event["id"]) }
+        .filter_map { |event| event["type"] }.uniq
+    end
+
+    def no_pipeline_or_privacy_failures?(audit)
+      instrument = audit.fetch("instrument")
+      %w[capture_failures renderer_failures prohibited_data_findings unaccounted_failures].all? do |key|
+        instrument.fetch(key).empty?
+      end
+    end
+  end
 end

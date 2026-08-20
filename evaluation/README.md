@@ -75,6 +75,19 @@ evaluation/bin/study gate \
 
 The gate requires one small, medium, and non-trivial run. It rechecks artifact, evidence, ledger, prompt, and rendered-guide integrity, then checks runtime-unique relevance, current-state accuracy, semantic closure, matching, privacy, and failure accounting. Only a passing report changes the three runs to `eligible`; packet construction refuses every earlier state.
 
+## Run the Instrument v2 diagnostic
+
+The pre-registered v2 diagnostic is separate from Gate 1. Use `prompts/trajectory-positive-control-v1.md` for the single artificial implementation run, then use `prompts/closure-v2.md` once in the same settled Pi session without modifying source. Generate and audit the normal structured artifacts, then register the observed event IDs with the example contract in `schemas/diagnostic-registration-v1.example.json`:
+
+```sh
+evaluation/bin/study diagnostic-gate \
+  /absolute/path/to/runs/nontrivial-v2 \
+  /absolute/path/to/diagnostic-registration.json \
+  /absolute/path/to/instrument-v2-diagnostic.json
+```
+
+The report evaluates Gate A closure reliability and Gate B trajectory capture separately. It requires the runtime claim to cite the ordered hypothesis, failure, and superseding revision. A pass records `reviewer_eligible: false` and leaves the run at `audit-complete`; this artificial positive control cannot open a reviewer packet or be pooled with the v1 runs.
+
 ## Build the one-reviewer assignment
 
 After all three runs are eligible:

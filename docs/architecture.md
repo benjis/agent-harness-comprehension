@@ -112,6 +112,7 @@ The classes under `evaluation/lib/` own this boundary:
 - Visible and hidden tests run on separate copies of the frozen repository. Hidden results remain researcher-only and do not determine trial eligibility.
 - `ArtifactPipeline` validates versioned current-state, P-history, R-history, and generation-metadata contracts. It checks cited final files and runtime event IDs, records provenance hashes and costs, and deterministically renders both guides from one shared current-state model.
 - `ClaimAuditor` requires an audit row for every generated claim. `FormativeGate` re-derives provenance hashes and both guides, evaluates one small, medium, and non-trivial run together, and is the only component that can mark those runs eligible.
+- `DiagnosticGate` evaluates the pre-registered Instrument v2 closure and artificial trajectory-positive-control checks on one audited non-trivial run. It verifies the ordered hypothesis, failure, and superseding revision but deliberately leaves the run at `audit-complete` with `reviewer_eligible: false`.
 - `PacketBuilder` gives every condition the same task, repository, diff, and visible tests. P and R each receive one identically named `review-guide.md`; O receives no guide.
 - `FormativeAssignmentBuilder`, `ReviewSession`, and `ResultAnalyzer` record the current one-reviewer workflow and explicitly prevent a causal or release decision.
 

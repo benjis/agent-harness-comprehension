@@ -35,6 +35,11 @@ module StudyCli
 
       destination = arguments.shift
       print_json ComprehensionStudy::FormativeGate.new.evaluate(runs: arguments, destination: destination)
+    when "diagnostic-gate"
+      run_dir, registration, destination = exact!(arguments, 3, "diagnostic-gate RUN_DIR REGISTRATION_JSON OUTPUT_JSON")
+      print_json ComprehensionStudy::DiagnosticGate.new.evaluate(
+        run: run_dir, registration: registration, destination: destination
+      )
     when "formative"
       raise ArgumentError, "usage: formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR" unless arguments.length == 5
 
@@ -94,6 +99,7 @@ module StudyCli
       study register-artifacts RUN_DIR CURRENT_STATE_JSON POST_HOC_HISTORY_JSON RUNTIME_HISTORY_JSON GENERATION_METADATA_JSON
       study audit-run RUN_DIR AUDIT_JSON
       study gate OUTPUT_JSON RUN_DIR RUN_DIR RUN_DIR
+      study diagnostic-gate RUN_DIR REGISTRATION_JSON OUTPUT_JSON
       study formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR
       study review-start PACKET REVIEWER SESSION_JSON
       study review-open SESSION_JSON PACKET_RELATIVE_PATH
