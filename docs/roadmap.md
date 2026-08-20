@@ -22,7 +22,7 @@ No controlled human-comprehension benefit has been established.
 
 Current work:
 
-1. Rehearse `small-validation` end to end with the implemented artifact and audit contracts.
+1. Completed: rehearse `small-validation` end to end with the implemented artifact and audit contracts. The rehearsal produced 10 fully audited claims, matched 164/182-word guides, and no runtime-unique claim; the run remains researcher-only outside the repository.
 2. Run frozen Pi implementations for `medium-atomic-reservation` and `nontrivial-idempotent-dispatch`.
 3. Generate the structured artifacts once per run and retain all declared failures and costs.
 4. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.

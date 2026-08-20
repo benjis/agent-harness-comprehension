@@ -587,7 +587,7 @@ Stage 2, only after Gate 1:
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
 
-1. Rehearse `small-validation` end to end with Artifact Pipeline v1.
+1. Completed on 2026-08-20: rehearse `small-validation` end to end with Artifact Pipeline v1. The researcher-only run completed its claim audit and did not start a reviewer session.
 2. Run the medium and non-trivial Stage 1 trials.
 3. Generate each artifact set once, audit every claim, and retain failures and costs.
 4. Evaluate Gate 1 before reviewing the masked packets or hardening the Pi extension further.

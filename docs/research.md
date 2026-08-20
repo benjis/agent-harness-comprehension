@@ -119,6 +119,7 @@ The evidence establishes feasibility, not human benefit:
 - one dogfood session produced 36 execution events and no semantic events, leaving the rendered model empty;
 - a later inspection session produced 82 events, including 8 semantic events, but did not implement a real change and recorded no current constraint or invariant;
 - the self-contained evaluation harness can freeze a completed Pi workspace, preserve committed and untracked changes, run visible and hidden tests on copies, and build three matched review conditions;
+- the `small-validation` Artifact Pipeline v1 rehearsal produced a passing implementation, 62 execution events, 2 semantic events, matched 164/182-word guides, and 10 supported audited claims; both runtime claims were post-hoc recoverable, so this small negative-control-like task contributed no runtime-unique evidence while adding 2 tool calls, 2 turns, 9,119 attributable tokens, about 15.2 seconds, and 20,213 bytes of capture artifacts;
 - no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
 
 The current decision gate is whether medium and non-trivial tasks contain reliable, review-relevant runtime facts that are not equivalently recoverable from final-state evidence. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

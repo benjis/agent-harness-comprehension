@@ -4,7 +4,7 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: Gate 1 trial production.** The Pi extension, structured artifact pipeline, claim audit, and evidence gate are implemented and tested. Initial dogfood established capture feasibility but also exposed missing and sparse semantic checkpoints. No controlled evidence yet shows that execution-time capture improves human understanding.
+> **Current status: Gate 1 trial production.** The Pi extension, structured artifact pipeline, claim audit, and evidence gate are implemented and tested. The `small-validation` Artifact Pipeline v1 rehearsal completed with matched, fully audited artifacts and no runtime-unique claim; the medium and non-trivial trials remain. No controlled evidence yet shows that execution-time capture improves human understanding.
 
 ## Current research step
 
@@ -18,7 +18,7 @@ The current study uses three ParcelFlow Ruby tasks and three matched review cond
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is to produce and audit the three frozen task runs. Human review remains blocked until the automated Gate 1 report passes; the later review is a formative self-study, not an efficacy test or treatment-effect estimate.
+Only one reviewer is currently available. The immediate next step is to produce and audit the frozen `medium-atomic-reservation` and `nontrivial-idempotent-dispatch` runs, then evaluate all three runs together. Human review remains blocked until the automated Gate 1 report passes; the later review is a formative self-study, not an efficacy test or treatment-effect estimate.
 
 ## What exists
 
