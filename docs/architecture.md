@@ -80,6 +80,39 @@ The renderer also runs when the agent settles and during session shutdown.
 5. Settlement, shutdown, or `/comprehension` reads the ledger and rewrites `mental-model.md`.
 6. Superseded records remain auditable but are excluded from current truth.
 
+## Evaluation boundary
+
+The Ruby evaluation harness is separate from the Pi runtime extension. It imports a completed Pi workspace after the agent has settled; it does not drive the agent or mutate the treatment while implementation is running.
+
+```text
+prepared ParcelFlow workspace
+           │ Pi + extension
+           ▼
+completed workspace + session ledger
+           │ import and drift check
+           ▼
+ frozen run directory
+ task + repository + diff + visible tests
+ researcher-only ledger + hidden tests
+           │ register matched guides
+           ▼
+ O / P / R review packets
+           │ condition-masked review
+           ▼
+ formative session and score records
+```
+
+`evaluation/lib/comprehension_study.rb` owns this boundary:
+
+- `ProjectFactory` creates a clean, committed task baseline without private rubrics or hidden tests.
+- `RunImporter` resolves the fixture's root commit as the baseline, captures committed and untracked changes, excludes `.git`, `.pi`, and `.comprehension` from reviewer source, fingerprints the source before and after import, and rejects drift.
+- Visible and hidden tests run on separate copies of the frozen repository. Hidden results remain researcher-only and do not determine trial eligibility.
+- `GuideRegistrar` requires matching headings, a 750-word cap, a 10% length tolerance, and a parseable shared current-state model before marking a run eligible.
+- `PacketBuilder` gives every condition the same task, repository, diff, and visible tests. P and R each receive one identically named `review-guide.md`; O receives no guide.
+- `FormativeAssignmentBuilder`, `ReviewSession`, and `ResultAnalyzer` record the current one-reviewer workflow and explicitly prevent a causal or release decision.
+
+Individual workspaces and run directories stay outside the repository. The reusable fixture, private task material, runner, and tests live under `evaluation/`. No earlier DSH repository or runtime is required.
+
 ## Data boundary
 
 The comprehension layer explicitly does **not** capture:
@@ -110,4 +143,6 @@ The semantic tool instructions also prohibit those contents. This is a design bo
 - The current storage model assumes one extension process writes a session ledger.
 - Retention, redaction, migrations, integrity checks, and multi-harness schemas remain future work.
 - The Pi adapter demonstrates feasibility, not harness portability.
-
+- Import-time fingerprints detect local source drift during the evidence cut but do not control remote writers or prove general task settlement.
+- Matched P/R guide generation and claim-level audit are protocol requirements but are not yet automated; the current harness validates and registers externally generated guides.
+- The current evaluation has one reviewer and produces formative case evidence only.

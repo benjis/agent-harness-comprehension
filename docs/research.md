@@ -1,4 +1,4 @@
-# Research note: comprehension debt in agent-generated software
+# Research: comprehension debt in agent-generated software
 
 ## Abstract
 
@@ -113,6 +113,12 @@ An inconclusive pilot is not confirmation. Results should be reported by task si
 
 ## Current evidence
 
-The current evidence establishes only feasibility: the Pi prototype records and renders the specified event forms, preserves append-only history, reconciles explicit supersession, exposes inspection commands, and passes its software tests. Informal dogfooding has begun. No controlled result currently establishes a human-comprehension benefit.
+The evidence establishes feasibility, not human benefit:
 
-See the [experiment plan](experiment-plan.md) for the proposed test and [roadmap](roadmap.md) for the current stage.
+- the Pi prototype records and renders the specified event forms, preserves append-only history, reconciles explicit supersession, exposes inspection commands, and passes its software tests;
+- one dogfood session produced 36 execution events and no semantic events, leaving the rendered model empty;
+- a later inspection session produced 82 events, including 8 semantic events, but did not implement a real change and recorded no current constraint or invariant;
+- the self-contained evaluation harness can freeze a completed Pi workspace, preserve committed and untracked changes, run visible and hidden tests on copies, and build three matched review conditions;
+- no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
+
+The current decision gate is whether medium and non-trivial tasks contain reliable, review-relevant runtime facts that are not equivalently recoverable from final-state evidence. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

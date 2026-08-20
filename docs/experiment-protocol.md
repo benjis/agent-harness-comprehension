@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft protocol for the next research phase. This document turns the broad study design in `experiment-plan.md` into an executable artifact-discrimination study followed by a single-reviewer formative self-study.
+Protocol version: 2, draft for the current research phase. This document defines an executable artifact-discrimination study followed by a single-reviewer formative self-study. A later multi-reviewer efficacy design is preserved separately below and is not the current procedure.
 
 The Pi extension is the primary treatment generator. DeepSeek Harness is not a study dependency. The ParcelFlow Ruby tasks, hidden tests, templates, and a rewritten harness-neutral study runner now live under `evaluation/` in this repository.
 
@@ -191,7 +191,7 @@ The post-hoc generator must not receive the Pi session, runtime event ledger, im
 
 Provide Condition O plus a file with the same name and structure, `review-guide.md`. Generate it from the same final-state inputs as Condition P plus the bounded semantic checkpoint ledger.
 
-Do not expose the raw ledger as additional reviewer material in this pilot. Raw execution events and the session remain researcher-only. This keeps the primary comparison focused on information quality rather than on the ability to search a larger packet.
+Do not expose the raw ledger as additional reviewer material in this formative study. Raw execution events and the session remain researcher-only. This keeps the conceptual comparison focused on information quality rather than on the ability to search a larger packet.
 
 The Pi extension's existing deterministic `mental-model.md` remains a preserved instrument output and an input to reliability analysis. It is not used directly as the Condition R guide because it does not independently verify current-state claims against the frozen final repository.
 
@@ -288,7 +288,7 @@ A completed change can produce review packets only when:
 
 Hidden-test failure does not make a run ineligible. It creates an opportunity to measure defect detection.
 
-Implementation failure, missing checkpoints, guide-generation failure, ledger corruption, and privacy rejection must be reported as treatment or study costs. Do not silently discard them. During the frozen human pilot, do not rerun a task merely to obtain a more interesting trajectory. A replacement run requires a documented protocol amendment and a new run identifier.
+Implementation failure, missing checkpoints, guide-generation failure, ledger corruption, and privacy rejection must be reported as treatment or study costs. Do not silently discard them. During the frozen formative study, do not rerun a task merely to obtain a more interesting trajectory. A replacement run requires a documented protocol amendment and a new run identifier.
 
 ## Stage 1: artifact discrimination audit
 
@@ -344,7 +344,7 @@ Proceed to human review only when all of the following are true:
 
 The small task is allowed to contain no runtime-unique claim. That is evidence of appropriate sparsity, not automatically a failure.
 
-If Gate 1 fails because checkpoints are absent or malformed, make one bounded capture redesign and repeat Stage 1 under a new instrument version. If it fails because no reliable information increment exists, do not run the human pilot; pivot to post-hoc evidence generation or stop the execution-time claim.
+If Gate 1 fails because checkpoints are absent or malformed, make one bounded capture redesign and repeat Stage 1 under a new instrument version. If it fails because no reliable information increment exists, do not run the formative review sessions; pivot to post-hoc evidence generation or stop the execution-time claim.
 
 ## Stage 2: single-reviewer formative self-study
 
@@ -495,6 +495,38 @@ If Stage 1 finds no reliable runtime information increment, but the post-hoc gui
 ### Stop
 
 Stop or materially reformulate the hypothesis if runtime capture is frequently absent, contradicted, misleading, privacy-unsafe, or too unreliable to generate consistently. Treat a serious false-confidence or workflow failure in the self-study as a reason to redesign before any further review experiment.
+
+## Future efficacy study, not currently active
+
+Run this stage only if the artifact audit establishes a reliable runtime information increment and the formative self-study finds no blocking workflow or false-confidence failure.
+
+Use a within-participant randomized crossover where each participant reviews different calibrated tasks under O, P, and R. Every frozen implementation must be reviewed under every condition by different participants; never compare different agent implementations as if they were conditions. Recruit enough independent reviewers to provide at least six observations per condition for a directional pilot, then use observed variance to set a sample-size target for any confirmatory study.
+
+Record participant experience and exact-task familiarity. Balance task and condition order with a reproducible seed. Keep condition labels, hidden tests, private rubrics, and researcher-only sessions unavailable until answers and initial scores are frozen. Double-score at least 20% of observations and report inter-rater agreement.
+
+Primary outcomes remain:
+
+- time-to-committed answers;
+- architecture and control/data-flow comprehension;
+- invariant recognition and impact prediction;
+- defect localization and review-decision quality;
+- confidence calibration.
+
+Report medians, distributions, within-participant differences, per-task results, effect sizes, and uncertainty intervals. Treat missing artifacts and capture failures as treatment costs. Stratify by task complexity, repository, reviewer experience, and failure mode.
+
+Before recruiting, pre-register the practical effect threshold and non-inferiority margin. The prior planning value was a 15% median time reduction for R versus P with no more than a 5 percentage-point correctness decrease, no material decline in defect or review decisions, and no increase in overconfidence. Reconfirm those values using the formative task timings rather than treating them as immutable.
+
+Threats requiring explicit mitigation include:
+
+- participants learning the study vocabulary;
+- unequal guide length or reading time;
+- checkpoint behavior varying by model or task;
+- rubrics rewarding concepts emphasized by the treatment schema;
+- repeated exposure improving general review skill;
+- synthetic defects failing to represent maintenance work;
+- shifted effort from reviewers to capture and artifact generation.
+
+This later study may support a directional continue/stop decision. It still cannot establish generality across harnesses, models, languages, repositories, or professional settings without broader follow-up evidence.
 
 ## Data handling
 

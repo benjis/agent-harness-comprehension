@@ -8,7 +8,7 @@ Agent Harness Comprehension is an early research and engineering project. Contri
 - Cases where the mental model is wrong, stale, noisy, or creates false confidence.
 - Privacy and security review of captured fields and persistence behavior.
 - Improvements to event schemas, reconciliation, deterministic rendering, and tests.
-- Adapters for other agent harnesses that preserve the same data boundary.
+- Reliability work required by the current Pi artifact audit and evaluation protocol.
 - Better scoring rubrics or lightweight study tooling.
 
 ## Before opening a change
@@ -34,5 +34,6 @@ Never add prompts, assistant messages, raw tool outputs, credentials, secrets, o
 
 Report the task, repository revision, model/configuration, participant experience, condition assignment, outcomes, exclusions, and failures. Negative and inconclusive results are welcome. Do not present a small dogfood run as general proof.
 
-By contributing, you agree that your contributions are licensed under the MIT License.
+Follow the repository completion and documentation-freshness workflow in [AGENTS.md](AGENTS.md). Cross-harness adapters and broader product work remain deferred until the current evidence gates justify them.
 
+By contributing, you agree that your contributions are licensed under the MIT License.

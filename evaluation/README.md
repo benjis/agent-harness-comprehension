@@ -1,6 +1,6 @@
 # Pi comprehension formative study
 
-This directory contains the self-contained Ruby evaluation assets for `docs/experiment-protocol-v2.md`. It uses only Ruby's standard library, Git, and artifacts imported from a completed Pi run. DeepSeek Harness is not required.
+This directory contains the self-contained Ruby evaluation assets for [`docs/experiment-protocol.md`](../docs/experiment-protocol.md). It uses only Ruby's standard library, Git, and artifacts imported from a completed Pi run. DeepSeek Harness is not required.
 
 ## Study boundary
 

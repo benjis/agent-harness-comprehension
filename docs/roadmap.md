@@ -1,82 +1,71 @@
 # Roadmap
 
-This roadmap separates implemented prototype behavior from planned research and engineering. Dates are intentionally omitted until pilot results justify the next stage.
+The project is in **mechanism-discrimination preparation**. Engineering work is gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
 
-## Experimental lineage
-
-- **Skill layer — Agentic Survivor:** post-hoc mental-model reconstruction exposed the difficulty of recovering failed paths and causal revisions.
-- **DeepSeek Harness experiments:** explored comprehension as a harness-integrated concern with a different post-settlement design.
-- **Current Pi prototype:** tests execution-time typed events, append-only history, explicit supersession, and deterministic rendering through native extension hooks.
-
-The experiments share a problem statement, but their architectures should remain distinguishable so their mechanisms can be evaluated rather than blended.
-
-## Current stage: prototype and dogfood
-
-Implemented:
+## Completed foundation
 
 - Pi lifecycle and tool-event adapter.
 - Typed semantic checkpoint tool.
 - Append-only per-session JSONL ledger.
-- Explicit supersession and current/history reconciliation.
-- Deterministic Markdown mental-model renderer.
+- Explicit supersession and deterministic current/history rendering.
 - `/comprehension` and `/comprehension-status`.
-- Automated tests for the core storage, schema, reconciliation, and extension behavior.
-
-In progress:
-
-- Real-task dogfooding.
-- Cataloging missing, noisy, contradictory, and sensitive events.
-- Refining the baseline-versus-treatment protocol.
+- Focused TypeScript tests for the research prototype.
+- Migrated ParcelFlow fixture, three tasks, private rubrics, hidden tests, and templates.
+- DSH-independent Ruby evaluation harness for Pi run import, repository freezing, visible/hidden verification, matched packet construction, single-reviewer session recording, and formative analysis.
+- Operational three-condition protocol with explicit artifact and interpretation gates.
 
 No controlled human-comprehension benefit has been established.
 
-## Milestone 1: harden the research prototype
+## Gate 1: establish a runtime information increment
 
-- Add bounded field-size and total-ledger limits at persistence time.
-- Validate referenced supersession IDs and detect contradictory current records.
-- Add schema versioning and migration fixtures.
-- Add atomic renderer writes and explicit corruption diagnostics.
-- Define retention and local artifact deletion guidance.
-- Expand tests for cancellation, partial writes, concurrent calls, and malformed ledgers.
-- Document exact Pi version compatibility.
+Current work:
 
-Exit criterion: repeatable local sessions with known failure behavior and no silent capture of prohibited data in test fixtures.
+1. Define a versioned shared current-state model and matched P/R guide-generation inputs.
+2. Implement claim-level audit output and generation-cost capture.
+3. Rehearse `small-validation` end to end.
+4. Run frozen Pi implementations for `medium-atomic-reservation` and `nontrivial-idempotent-dispatch`.
+5. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
 
-## Milestone 2: instrument the pilot
+Exit only if:
 
-- Build frozen review-packet generation for ordinary, post-hoc, and treatment conditions.
-- Add timing, navigation, confidence, correctness, divergence, token, latency, and storage measurements.
-- Create task-specific blinded scoring rubrics.
-- Run protocol rehearsals and publish deviations.
+- medium and non-trivial tasks each contain a confirmed runtime-unique, review-relevant claim;
+- neither guide contains a high-severity contradicted current-state claim;
+- contradicted or stale current-state claims remain below the protocol limit;
+- required semantic closure, matching, privacy, and failure-accounting checks pass.
 
-Exit criterion: the study machinery produces complete, scoreable packets without condition-dependent implementation changes.
+If the gate fails because capture is malformed, allow one bounded redesign under a new instrument version. If it fails because runtime information is not unique or useful, pivot to a revision-pinned post-hoc guide or stop the execution-time claim.
 
-## Milestone 3: run and report the pilot
+## Gate 2: single-reviewer formative workflow
 
-- Run diverse tasks with multiple reviewers.
-- Score a subset twice and report agreement.
-- Publish anonymized results, failure cases, and artifact examples where permitted.
-- Decide whether to continue, narrow, redesign, or stop the hypothesis.
+Only after Gate 1:
 
-Exit criterion: a transparent directional result and a grounded decision about confirmatory evaluation.
+- generate one O, P, and R assignment across the three tasks;
+- complete three condition-masked review sessions;
+- freeze answers and initial scores before opening the researcher key;
+- report timing, files opened, correctness, confidence, cognitive load, artifact defects, and protocol deviations;
+- publish the result as formative and causally uninterpretable.
 
-## Milestone 4: test generality
+The output may justify another research iteration, narrow the capture mechanism, reveal a pivot, or expose a stop condition. It cannot establish that R outperforms P or O.
 
-Only if the pilot is promising:
+## Gate 3: efficacy study
 
-- Add a second harness adapter behind a shared versioned event schema.
-- Compare models and task types.
-- Run ablations: execution metadata only, semantic events only, no supersession, post-hoc extraction, and deterministic versus model-written rendering.
-- Evaluate maintainers on unfamiliar and familiar repositories.
+Only if Gates 1 and 2 are promising and independent reviewers become available:
 
-Exit criterion: evidence about which mechanism helps, for whom, and under what conditions—not merely a larger feature set.
+- run the balanced multi-reviewer design in `experiment-protocol.md`;
+- pre-register practical effect and correctness margins;
+- double-score a subset and report agreement;
+- publish anonymized observations, uncertainty, deviations, failures, and negative results.
 
-## Possible later work
+## Deferred engineering
 
-- Evidence links verified against repository revisions.
-- Integrity hashes and signed/exportable ledgers.
-- IDE or web views over the same deterministic projection.
-- Project-level reconciliation across sessions.
-- Privacy policy enforcement and secret scanning.
+Do not prioritize these before the evidence gates require them:
 
-These are not commitments. They depend on evaluation results and should not precede evidence that the core approach is useful.
+- full schema migrations and cross-process locking;
+- cross-harness adapters or a generalized ontology;
+- project-level memory or reconciliation across sessions;
+- cryptographic integrity and export formats;
+- IDE, web, or dashboard views;
+- graph databases, embeddings, or retrieval infrastructure;
+- cloud telemetry or services.
+
+Implement only the reliability, privacy, and diagnostics work needed to run the current protocol without silently losing or misrepresenting evidence.
