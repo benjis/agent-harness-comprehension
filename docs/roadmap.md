@@ -1,6 +1,6 @@
 # Roadmap
 
-The project is in **Gate 1 trial production**. Engineering work is gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
+The project has **failed Gate 1 under Artifact Pipeline v1**. Engineering work remains gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
 
 ## Completed foundation
 
@@ -24,10 +24,10 @@ Current work:
 
 1. Completed: rehearse `small-validation` end to end with the implemented artifact and audit contracts. The rehearsal produced 10 fully audited claims, matched 164/182-word guides, and no runtime-unique claim; the run remains researcher-only outside the repository.
 2. Completed: run and audit `medium-atomic-reservation`. Its implementation and tests passed, but it contained no runtime-unique claim and missed required goal and constraint/invariant semantic coverage; retain this negative result without rerunning it.
-3. Run and audit the frozen `nontrivial-idempotent-dispatch` implementation.
-4. Generate the structured artifacts once per run and retain all declared failures and costs.
-5. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
-6. Run the implemented three-run gate before opening any reviewer packet.
+3. Completed: run and audit `nontrivial-idempotent-dispatch`. It also contained no runtime-unique claim and missed required goal and constraint/invariant coverage.
+4. Completed: generate and audit all structured artifacts while retaining declared failures and costs.
+5. Completed: run the three-run gate. Small passed its applicable checks; medium and non-trivial each failed runtime uniqueness and semantic coverage, so Gate 1 failed and no reviewer packet may be opened.
+6. Decide whether to make the one bounded, pre-registered capture redesign allowed by the protocol under a new instrument version or pivot to post-hoc evidence generation.
 
 Exit only if:
 

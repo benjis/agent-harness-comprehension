@@ -4,7 +4,7 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: Gate 1 trial production.** The `small-validation` and `medium-atomic-reservation` runs have completed Artifact Pipeline v1 audits. The medium run produced no runtime-unique claim and missed required goal and constraint/invariant coverage, so its individual Gate 1 preview fails; the non-trivial run and formal three-run gate remain. No controlled evidence yet shows that execution-time capture improves human understanding.
+> **Current status: Gate 1 failed.** All three Artifact Pipeline v1 runs and claim audits are complete. Neither the medium nor non-trivial run produced a runtime-unique review-relevant claim, and both missed required goal and constraint/invariant coverage. Reviewer sessions remain blocked; no controlled evidence shows that execution-time capture improves human understanding.
 
 ## Current research step
 
@@ -18,7 +18,7 @@ The current study uses three ParcelFlow Ruby tasks and three matched review cond
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is to produce and audit the frozen `nontrivial-idempotent-dispatch` run, then evaluate all three runs together. Human review remains blocked; the medium result already fails two pre-registered checks, and the later review can begin only after a passing Gate 1 report.
+Only one reviewer is currently available. The immediate next decision is whether to use the protocol's one bounded capture redesign under a new instrument version or pivot to simpler post-hoc evidence generation. Do not begin the formative self-study unless a future repeated Gate 1 passes.
 
 ## What exists
 
