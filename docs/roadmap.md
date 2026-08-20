@@ -29,7 +29,8 @@ Current work:
 5. Completed: run the three-run gate. Small passed its applicable checks; medium and non-trivial each failed runtime uniqueness and semantic coverage, so Gate 1 failed and no reviewer packet may be opened.
 6. Completed: implement the one bounded Instrument v2 diagnostic amendment with separate closure-reliability and artificial trajectory-positive-control gates.
 7. Completed without rerun: both diagnostic gates passed, while the run remained separate from v1 and ineligible for reviewer packets.
-8. Decide whether to pre-register a natural-task v2 gate or pivot to post-hoc evidence generation before opening any reviewer session.
+8. Selected: run the pre-registered fail-fast natural-task v2 gate, beginning with `medium-normalized-item-validation` and continuing only after a natural runtime information increment.
+9. On a valid uniqueness failure, pivot immediately to revision-pinned post-hoc evidence and stop further runtime capture. Only two passing natural tasks may make the project reviewer-study-ready.
 
 Exit only if:
 

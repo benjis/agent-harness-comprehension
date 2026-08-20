@@ -606,6 +606,35 @@ Passing Gate A or B establishes only instrument capability under this artificial
 
 Result recorded on 2026-08-20: the one permitted diagnostic passed Gate A and Gate B without a rerun. The run contained the induced instance-local hypothesis, expected cross-instance test failure, and a superseding shared-log revision. The bounded closure did not change source and added one task constraint after the initial invariant event had described the diagnostic procedure instead of the task invariant. All eight artifact claims were audited; the one trajectory claim was `runtime-unique` and `review-relevant`, while seven claims were supported by final-state evidence. The artificial run remains `audit-complete`, explicitly non-eligible for reviewer use, and separate from v1.
 
+## Protocol amendment 2: fail-fast natural-task v2 gate
+
+Status: pre-registered on 2026-08-20 after the artificial Instrument v2 diagnostic passed and before either natural task, task fixture, hidden test, or run was created. This is the final bounded test of the execution-time information-increment claim; it does not permit another capture redesign.
+
+Use two fresh ParcelFlow tasks in a fixed order:
+
+1. `medium-normalized-item-validation`: reject Shipment item quantities that are not positive integers and reject distinct input keys that collide after string normalization, while preserving the empty-shipment error and frozen normalized items.
+2. `nontrivial-dispatch-log-rollback`: if `DispatchLog#append` raises after inventory reservation, restore exactly the reserved quantities and re-raise the original exception without compensating for a reservation that did not complete.
+
+Each task starts from the unchanged ParcelFlow fixture in a new workspace. Use the ordinary versioned `natural-implementation-v1` instruction, which asks only to implement `TASK.md`, add focused visible tests, and run the visible suite. It must not suggest an implementation, failure, alternative, hypothesis, revision, or desired runtime trajectory. After natural implementation settles, use `closure-v2` once in the same session. Closure may repair supported current semantic coverage but may not contribute a runtime-unique history claim.
+
+Run the medium task first. Continue to the non-trivial task only if the medium run passes its natural task gate. Do not rerun, replace, or tune a task after seeing its outcome. Do not pool either run with v1 or the artificial positive control.
+
+A natural task passes only when:
+
+- visible tests pass and the artifact and exhaustive claim-audit integrity checks pass;
+- current semantic coverage contains `goal`, `decision`, `validation`, and at least one of `constraint` or `invariant` after bounded closure;
+- there is no high-severity contradiction, privacy finding, unaccounted failure, or guide-budget violation;
+- at least one audited `runtime-unique`, `review-relevant` or `critical` runtime claim cites a naturally occurring pre-closure causal sequence containing a hypothesis, alternative, or failure and a later decision or revision linked by `because` or `supersedes`;
+- the claim cannot be supported with equivalent confidence by `TASK.md`, the frozen repository, final diff, or visible tests.
+
+Fail-fast decision rule:
+
+- if a valid run lacks the required runtime information increment, stop immediately, do not run any remaining natural task, and pivot the project to revision-pinned post-hoc evidence generation;
+- if a run is invalid because implementation, transport, capture, artifact, or audit integrity fails, stop without rerun and report the natural gate as inconclusive rather than treating invalidity as evidence for the post-hoc pivot;
+- only if both tasks pass may the project become `reviewer-study-ready`; packet construction and the reviewer session still require an explicit user start and remain forbidden during this gate.
+
+Record all natural implementation, semantic capture, closure, generation, storage, failure, and missing-telemetry costs. Hidden tests remain researcher-only costs and do not determine natural-gate eligibility.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -615,4 +644,4 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 3. Completed: generate each artifact set, audit every claim, and retain failures and costs.
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
 5. Completed on 2026-08-20: the one bounded Instrument v2 diagnostic passed both artificial capability gates without a rerun. It remains non-eligible and did not begin a reviewer session.
-6. Next decision: pre-register a natural-task v2 gate or pivot to simpler post-hoc evidence generation. Do not begin the single-reviewer sessions before that evidence decision and an applicable passing gate.
+6. Selected on 2026-08-20: execute the fail-fast natural-task v2 gate above. Do not begin reviewer sessions during the gate.

@@ -18,7 +18,7 @@ The current study uses three ParcelFlow Ruby tasks and three matched review cond
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next decision is whether to pre-register a natural-task v2 gate or pivot to simpler post-hoc evidence generation. The passed artificial diagnostic does not reopen reviewer sessions or count as evidence of natural runtime benefit.
+Only one reviewer is currently available. The immediate next step is the pre-registered fail-fast natural-task v2 gate: one fresh medium task, followed by one fresh non-trivial task only if the medium run produces a natural runtime information increment. A valid uniqueness failure triggers the post-hoc pivot; reviewer sessions remain blocked during this gate.
 
 ## What exists
 
