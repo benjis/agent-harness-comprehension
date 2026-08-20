@@ -1,0 +1,96 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+
+require_relative "../lib/comprehension_study"
+
+module StudyCli
+  module_function
+
+  def run(arguments)
+    command = arguments.shift
+    case command
+    when "prepare"
+      task_id, destination = exact!(arguments, 2, "prepare TASK_ID WORKSPACE")
+      print_json ComprehensionStudy::ProjectFactory.new.prepare(task_id: task_id, destination: destination)
+    when "import-run"
+      task_id, workspace, ledger, output = exact!(arguments, 4, "import-run TASK_ID WORKSPACE LEDGER_OR_DASH RUN_DIR")
+      print_json ComprehensionStudy::RunImporter.new.import(
+        task_id: task_id, workspace: workspace, ledger: ledger, output: output
+      )
+    when "attach-guides"
+      run_dir, post_hoc, runtime, current_state = exact!(
+        arguments, 4, "attach-guides RUN_DIR POST_HOC_GUIDE RUNTIME_GUIDE CURRENT_STATE_JSON"
+      )
+      print_json ComprehensionStudy::GuideRegistrar.new.attach(
+        run: run_dir, post_hoc: post_hoc, runtime: runtime, current_state: current_state
+      )
+    when "formative"
+      raise ArgumentError, "usage: formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR" unless arguments.length == 5
+
+      destination = arguments.shift
+      reviewer = arguments.shift
+      print_json ComprehensionStudy::FormativeAssignmentBuilder.new.build(
+        runs: arguments,
+        reviewer: reviewer,
+        destination: destination,
+        seed: Integer(ENV.fetch("STUDY_SEED", "20260820"), 10)
+      )
+    when "review-start"
+      packet, reviewer, session = exact!(arguments, 3, "review-start PACKET REVIEWER SESSION_JSON")
+      print_json ComprehensionStudy::ReviewSession.new.start(packet: packet, reviewer: reviewer, destination: session)
+    when "review-open"
+      session, path = exact!(arguments, 2, "review-open SESSION_JSON PACKET_RELATIVE_PATH")
+      print ComprehensionStudy::ReviewSession.new.open(session_path: session, relative_path: path)
+    when "review-finish"
+      session, answers = exact!(arguments, 2, "review-finish SESSION_JSON ANSWERS_JSON")
+      print_json ComprehensionStudy::ReviewSession.new.finish(
+        session_path: session, answers: JSON.parse(File.read(answers))
+      )
+    when "analyze"
+      key, sessions, scores, destination = exact!(arguments, 4, "analyze KEY SESSION_DIR SCORE_DIR OUTPUT_DIR")
+      print_json ComprehensionStudy::ResultAnalyzer.new.analyze(
+        researcher_key: key,
+        sessions: Dir[File.join(sessions, "*.json")].sort,
+        scores: Dir[File.join(scores, "*.json")].sort,
+        destination: destination
+      )
+    when "rubric"
+      task_id, = exact!(arguments, 1, "rubric TASK_ID")
+      print_json JSON.parse(File.read(File.join(ComprehensionStudy::ROOT, "tasks", "#{task_id}.json"))).fetch("rubric")
+    when "help", nil
+      puts help
+    else
+      raise ArgumentError, "unknown command #{command.inspect}\n\n#{help}"
+    end
+  end
+
+  def exact!(arguments, count, usage)
+    raise ArgumentError, "usage: #{usage}" unless arguments.length == count
+
+    arguments
+  end
+
+  def print_json(value)
+    puts JSON.pretty_generate(value)
+  end
+
+  def help
+    <<~TEXT
+      Pi comprehension study harness
+
+      study prepare TASK_ID WORKSPACE
+      study import-run TASK_ID WORKSPACE LEDGER_OR_DASH RUN_DIR
+      study attach-guides RUN_DIR POST_HOC_GUIDE RUNTIME_GUIDE CURRENT_STATE_JSON
+      study formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR
+      study review-start PACKET REVIEWER SESSION_JSON
+      study review-open SESSION_JSON PACKET_RELATIVE_PATH
+      study review-finish SESSION_JSON ANSWERS_JSON
+      study rubric TASK_ID
+      study analyze KEY SESSION_DIR SCORE_DIR OUTPUT_DIR
+    TEXT
+  end
+end
+
+StudyCli.run(ARGV)

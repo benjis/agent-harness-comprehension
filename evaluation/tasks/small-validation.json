@@ -1,0 +1,19 @@
+{
+  "id": "small-validation",
+  "level": "small",
+  "title": "Reject a missing delivery address",
+  "prompt": "ParcelFlow currently accepts a shipment whose delivery address has no country. Change Shipment so it rejects a missing or blank country with ArgumentError and the message `delivery address country is required`. Preserve the existing item validation and add focused tests.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/shipment.rb", "test/shipment_test.rb"],
+    "workflows": ["shipment construction before dispatch"],
+    "concepts": ["country must be present", "blank country is invalid", "existing item validation remains"],
+    "invariants": ["invalid shipments do not reach inventory reservation"],
+    "defect_probes": ["nil country", "empty string country", "whitespace-only country"],
+    "impact_question": "If country codes must later be normalized before validation, where should the change begin and which behavior and tests could be affected?",
+    "accepted_alternatives": ["validate in Shipment construction", "validate at a shared delivery-address boundary if one is introduced"],
+    "recoverability": {
+      "final_state": ["validation location", "accepted and rejected country forms", "preservation of item validation"],
+      "runtime_only_if_observed": ["an attempted validation boundary that was later rejected", "evidence that caused a validation approach to change"]
+    }
+  }
+}

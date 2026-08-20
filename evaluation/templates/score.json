@@ -1,0 +1,13 @@
+{
+  "packet_id": "",
+  "reviewer": "",
+  "scorer": "",
+  "component_model": 0,
+  "control_data_flow": 0,
+  "invariants": 0,
+  "impact_prediction": 0,
+  "defects": 0,
+  "review_decision": 0,
+  "evidence_traceability": 0,
+  "artifact_defects": []
+}

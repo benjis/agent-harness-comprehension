@@ -1,0 +1,19 @@
+{
+  "id": "medium-atomic-reservation",
+  "level": "medium",
+  "title": "Make multi-item reservations atomic",
+  "prompt": "Inventory#reserve can reduce stock for early items before a later item fails. Make reservation atomic: if any requested SKU is missing, insufficient, or has a non-positive quantity, no stock count may change. Keep the public reserve and available methods, preserve the existing error for insufficient stock, add clear errors for invalid quantities, and add focused tests.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/inventory.rb", "test/inventory_test.rb"],
+    "workflows": ["validate the complete reservation", "apply all stock decrements only after validation"],
+    "concepts": ["two-phase reservation", "missing SKU has zero available stock", "non-positive quantities are rejected"],
+    "invariants": ["a failed reservation leaves every stock count unchanged"],
+    "defect_probes": ["failure after an earlier valid SKU", "zero quantity", "negative quantity"],
+    "impact_question": "If reserve later needs a dry-run mode that validates without decrementing stock, where should it be added and which invariant must remain shared with normal reservation?",
+    "accepted_alternatives": ["validate all entries before mutation", "apply changes to a temporary stock copy and commit only after success"],
+    "recoverability": {
+      "final_state": ["validation-before-mutation flow", "error behavior", "atomicity tests"],
+      "runtime_only_if_observed": ["a mutation-first approach that failed", "why one atomicity strategy was rejected in favor of another"]
+    }
+  }
+}

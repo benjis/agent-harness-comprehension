@@ -1,5 +1,7 @@
 # Experiment plan
 
+> The operational next step is the single-reviewer formative study in [experiment-protocol-v2.md](experiment-protocol-v2.md). It validates the mechanism and study workflow but cannot estimate a treatment effect. The multi-reviewer design below remains the later efficacy-study design.
+
 ## Objective
 
 Test whether structured execution-time comprehension evidence helps developers understand completed agent-generated changes faster and at least as correctly as ordinary review materials and a time-matched post-hoc summary.

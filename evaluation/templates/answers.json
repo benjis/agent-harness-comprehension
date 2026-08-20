@@ -1,0 +1,18 @@
+{
+  "component_model": "",
+  "control_data_flow": "",
+  "invariants": "",
+  "impact_prediction": "",
+  "defects": "",
+  "review_decision": "",
+  "evidence_traces": [],
+  "confidence": {
+    "component_model": 3,
+    "control_data_flow": 3,
+    "invariants": 3,
+    "impact_prediction": 3,
+    "defects": 3,
+    "review_decision": 3
+  },
+  "cognitive_load": 4
+}

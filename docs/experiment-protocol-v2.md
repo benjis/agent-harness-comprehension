@@ -2,9 +2,11 @@
 
 ## Status
 
-Draft protocol for the next research phase. This document turns the broad study design in `experiment-plan.md` into an executable artifact-discrimination study followed, only if warranted, by a small human crossover pilot.
+Draft protocol for the next research phase. This document turns the broad study design in `experiment-plan.md` into an executable artifact-discrimination study followed by a single-reviewer formative self-study.
 
-The Pi extension is the primary treatment generator. DeepSeek Harness is not a study dependency. The ParcelFlow Ruby tasks and the harness-neutral parts of the earlier DSH evaluation may be migrated into this repository as research fixtures.
+The Pi extension is the primary treatment generator. DeepSeek Harness is not a study dependency. The ParcelFlow Ruby tasks, hidden tests, templates, and a rewritten harness-neutral study runner now live under `evaluation/` in this repository.
+
+Only one reviewer is currently available. The self-study can validate the protocol and produce case evidence, but it cannot estimate a causal treatment effect: reviewer, task, order, learning, and condition cannot all be separated with one observation per condition.
 
 ## Decision this protocol must support
 
@@ -17,6 +19,8 @@ The protocol is not intended to prove that any summary helps. It separates three
 3. Is any additional benefit large enough to justify capture cost, divergence risk, and harness complexity?
 
 The second question is the primary research question. If runtime-enhanced and post-hoc guides perform equivalently, the execution-time hypothesis is not supported even if both outperform ordinary review.
+
+The current one-reviewer phase cannot answer those comparative questions causally. It tests their prerequisites: whether a reliable runtime information increment exists, whether the packets make that increment usable, and whether a later efficacy study is justified.
 
 ## Hypotheses
 
@@ -55,7 +59,7 @@ This protocol covers:
 - completed local Git changes produced with the Pi extension active;
 - three initial ParcelFlow Ruby tasks;
 - researcher-only artifact audit before human exposure;
-- a three-condition, within-participant crossover pilot if the audit passes.
+- a three-condition, single-reviewer formative self-study if the audit passes.
 
 This protocol does not cover:
 
@@ -81,7 +85,7 @@ These are useful instrument findings. They are not evidence that runtime capture
 
 ## Study stages
 
-The protocol has two gates. Do not recruit reviewers until Stage 1 passes.
+The protocol has two gates. Do not begin the review sessions until Stage 1 passes.
 
 ```text
 Stage 0: freeze the instrument and study inputs
@@ -92,8 +96,8 @@ Stage 1: researcher-only artifact discrimination
           pass ------+------ fail
            |                    |
            v                    v
-Stage 2: human pilot       redesign, narrow,
-                            pivot, or stop
+Stage 2: one-reviewer      redesign, narrow,
+formative self-study       pivot, or stop
 ```
 
 ## Stage 0: freeze the instrument and study inputs
@@ -113,27 +117,27 @@ Before the first eligible run, record:
 
 Do not change these between study tasks without recording a protocol amendment. A blocking reliability fix starts a new instrument version; earlier runs remain reported as feasibility evidence and are not silently pooled with the new version.
 
-### Migrate the reusable Ruby research assets
+### Migrated Ruby research assets
 
-Copy the following assets from `dsh-comprehension-headless/evaluation/` into a harness-neutral `evaluation/` area in this repository:
+The following assets have been migrated into the harness-neutral `evaluation/` area in this repository:
 
 - `fixtures/parcel_flow/`;
 - `tasks/*.json`;
 - `hidden_tests/*.rb`;
 - answer and score templates;
-- project preparation, hidden verification, review-session, crossover, and analysis behavior that is independent of DSH.
+- project preparation, hidden verification, review-session, condition-assignment, and analysis behavior that is independent of DSH.
 
-Do not copy the DSH trial runner, profile installation, settlement codes, two-condition assumptions, or comprehension-package format as normative behavior. Preserve source provenance and the existing license when migrating files.
+The DSH trial runner, profile installation, settlement codes, two-condition assumptions, and comprehension-package format were not migrated as normative behavior. `evaluation/PROVENANCE.md` records the origin and license. The evaluation now runs without access to the earlier repository.
 
-The new evaluation runner should expose separate operations for:
+The evaluation workflow separates:
 
 1. preparing a clean task workspace;
 2. importing a completed Pi run and ledger;
 3. freezing the final repository and diff;
 4. running visible and hidden tests on frozen copies;
-5. generating matched post-hoc and runtime-enhanced guides;
+5. generating and registering matched post-hoc and runtime-enhanced guides;
 6. auditing claims;
-7. building blinded review packets;
+7. building condition-masked review packets;
 8. recording review sessions;
 9. scoring and analysis.
 
@@ -342,11 +346,11 @@ The small task is allowed to contain no runtime-unique claim. That is evidence o
 
 If Gate 1 fails because checkpoints are absent or malformed, make one bounded capture redesign and repeat Stage 1 under a new instrument version. If it fails because no reliable information increment exists, do not run the human pilot; pivot to post-hoc evidence generation or stop the execution-time claim.
 
-## Stage 2: human crossover pilot
+## Stage 2: single-reviewer formative self-study
 
-### Participants
+### Reviewer and interpretation limit
 
-Recruit 6–8 software developers who can read small Ruby programs. Record:
+The project author is the only current reviewer. Record:
 
 - professional experience;
 - Ruby familiarity;
@@ -354,22 +358,22 @@ Recruit 6–8 software developers who can read small Ruby programs. Record:
 - prior familiarity with ParcelFlow or the exact tasks;
 - recent experience reviewing agent-generated code.
 
-Prior familiarity with an exact task or completed change is an exclusion. Low Ruby familiarity is not automatically an exclusion; retain it for stratified reporting.
+Prior familiarity with the fixture, task rubric, or completed change is a protocol limitation rather than a removable reviewer exclusion when the author fills both researcher and reviewer roles. Record what was known before each session and do not inspect the private rubric, hidden tests, condition key, or completed change after the implementation run until the associated review answer is frozen.
 
-Six reviewers provide six observations per condition because each reviewer sees all three tasks and each condition exactly once. Fewer than six reviewers is a protocol rehearsal and cannot trigger a continue/stop decision.
+The three sessions produce one observation per condition. They are useful for finding broken instructions, timing problems, misleading claims, poor reading order, and clear individual cases. They are not a sample-size estimate and cannot support a treatment-effect, go/no-go, or general effectiveness claim.
 
 ### Assignment
 
-Use a reproducible balanced Latin-square-style assignment:
+Use a reproducible seeded assignment:
 
-- each reviewer sees each task once;
-- each reviewer sees O, P, and R once;
-- each task appears under every condition equally often;
-- task order and condition order are balanced across reviewers;
+- the reviewer sees each task once;
+- the reviewer sees O, P, and R once;
+- each task receives exactly one condition;
+- packet order is shuffled independently from condition assignment;
 - packet identifiers do not disclose condition;
 - the researcher key containing condition and hidden-test outcomes remains private.
 
-Participants cannot be fully blinded to whether a guide exists. They should not be told which guide contains runtime evidence or which condition the study is expected to favor.
+The reviewer cannot be fully blinded because the presence of a guide is visible and the author helped design the artifacts. Use identical guide filenames and keep the condition key closed until all three answers and initial scores are frozen. Report any recognition of a condition or remembered rubric fact as a deviation.
 
 ### Review procedure
 
@@ -383,7 +387,7 @@ For each packet:
 6. collect confidence for each scored answer, not only one global confidence value;
 7. collect cognitive load on a 1–7 scale after the task.
 
-Ask every reviewer:
+Ask the reviewer:
 
 1. What changed, and which components own the new behavior?
 2. What is the main control/data flow?
@@ -394,7 +398,7 @@ Ask every reviewer:
 
 ### Scoring
 
-Freeze answers before scoring. Scorers may use the private task rubric, frozen repository, diff, visible and hidden test outcomes, and researcher evidence index. Scorers must not see condition labels.
+Freeze answers before scoring. The author performs an initial score using the private task rubric, frozen repository, diff, visible and hidden test outcomes, and researcher evidence index before opening the condition key. This masks the condition during initial scoring but does not make the score independent.
 
 Score each field from 0 to 2:
 
@@ -406,7 +410,7 @@ Score each field from 0 to 2:
 - review decision quality;
 - evidence traceability.
 
-Use anchored task-specific examples for `0`, `1`, and `2`. Double-score at least 20% of observations, including examples from every condition. Report agreement and resolve material disagreements before unblinding conditions.
+Use anchored task-specific examples for `0`, `1`, and `2`. Inter-rater agreement cannot be measured with the current reviewer pool. If an independent scorer becomes available later, preserve the frozen answers and original scores so a blinded second score can be added without replacing them.
 
 Also classify guide defects:
 
@@ -422,24 +426,24 @@ Also classify guide defects:
 
 ## Outcomes and analysis
 
-### Primary comparison
+### Descriptive comparison
 
-Compare R with P. This isolates the incremental value of runtime evidence from the general value of receiving a guide.
+Describe R, P, and O separately. R versus P remains the conceptual comparison, but the single-reviewer data cannot isolate runtime evidence from task difficulty, order, or learning.
 
-Primary outcomes:
+Recorded primary measures:
 
-- median time-to-committed answers;
+- time-to-committed answers;
 - aggregate primary correctness across component model, flow, invariant, impact, defect localization, and review decision;
 - confidence calibration error.
 
-Report medians, full distributions, paired within-participant differences, per-task results, and uncertainty intervals. The pilot is descriptive and directional; do not use a small p-value as proof of general effectiveness.
+Report the raw observation for each task and condition. Do not calculate an effect size, uncertainty interval, statistical test, or release decision from one observation per condition.
 
-### Secondary comparisons
+### Secondary descriptions
 
-- P versus O: value of a post-hoc evidence-grounded guide;
-- R versus O: total value of the runtime-enhanced review experience;
-- R versus P on revision/causal questions specifically;
-- performance by task complexity and reviewer experience.
+- P and O observations, without attributing differences to the guide;
+- R and O observations, without attributing differences to runtime evidence;
+- whether the R session used the runtime-unique claims identified in Stage 1;
+- task complexity, order, and prior-familiarity context for every observation.
 
 Secondary outcomes:
 
@@ -453,24 +457,24 @@ Secondary outcomes:
 - artifact defects noticed by reviewers;
 - total implementation, capture, generation, and maintenance cost.
 
-### Pre-registered directional threshold
+### Formative completion criteria
 
-The pilot supports continuing the runtime mechanism only if:
+The self-study is complete when:
 
-- median review time for R is at least 15% lower than P;
-- aggregate primary correctness for R is no more than 5 percentage points below P;
-- defect localization and review decision quality do not materially decline;
-- confidence calibration and overconfidence do not worsen;
-- Stage 1 confirmed a real runtime information increment;
-- observed capture and maintenance cost remains plausible relative to saved review time.
+- all three packets can be reviewed through the recorded workflow;
+- answers, per-answer confidence, opened files, timing, and cognitive load are captured;
+- scoring can be completed without exposing the condition key first;
+- artifact defects and protocol deviations are recorded;
+- Stage 1's runtime-unique claims can be checked against the reviewer's actual use or non-use of them;
+- the report prominently marks every result as formative and causally uninterpretable.
 
-Because this is a small pilot, missing the 15% threshold does not estimate a precise zero effect. It means the project should not invest in production hardening on the basis of current evidence.
+Observed time or score differences may motivate a later task or artifact redesign, but they must not trigger production hardening or a claim that R outperforms P. A later efficacy study requires additional independent reviewers or a substantially larger set of calibrated, non-repeated task variants.
 
 ## Decision outcomes
 
 ### Continue
 
-Continue to prototype hardening and a larger study only if R clears the directional threshold and the benefit appears on more than one task.
+Continue limited mechanism development only if Stage 1 finds reliable runtime-unique information and the self-study shows that the information can be used without creating a serious artifact or workflow failure. This is permission for another research iteration, not evidence of human benefit.
 
 Next work may then include:
 
@@ -486,11 +490,11 @@ If value appears only in failed paths, revisions, or rejected alternatives, narr
 
 ### Pivot
 
-If P and R are equivalent but both outperform O, stop treating execution-time capture as the main mechanism. Continue with a simpler revision-pinned post-hoc reviewer package.
+If Stage 1 finds no reliable runtime information increment, but the post-hoc guide remains coherent and useful during rehearsal, stop treating execution-time capture as the main mechanism. Continue with a simpler revision-pinned post-hoc reviewer package.
 
 ### Stop
 
-Stop or materially reformulate the hypothesis if R is slower, less correct, more misleading, less calibrated, or too unreliable to generate consistently.
+Stop or materially reformulate the hypothesis if runtime capture is frequently absent, contradicted, misleading, privacy-unsafe, or too unreliable to generate consistently. Treat a serious false-confidence or workflow failure in the self-study as a reason to redesign before any further review experiment.
 
 ## Data handling
 
@@ -504,7 +508,7 @@ Reviewer packets must not include:
 - private chain-of-thought;
 - private task rubrics or condition labels.
 
-Researcher-only Pi sessions may contain normal observable messages and tool records needed to audit event timing. Keep them local, access-controlled, and separate from publishable/anonymized results. Record retention and deletion dates before participant recruitment.
+Researcher-only Pi sessions may contain normal observable messages and tool records needed to audit event timing. Keep them local, access-controlled, and separate from publishable/anonymized results. Record retention and deletion dates before beginning review sessions.
 
 ## Protocol deviations
 
@@ -524,7 +528,7 @@ Do not change task rubrics, artifact prompts, scoring anchors, thresholds, or ex
 
 Stage 0:
 
-- migrated ParcelFlow research assets;
+- migrated ParcelFlow research assets and harness-neutral Ruby study runner;
 - pinned run manifest schema;
 - versioned P/R guide schema and generator prompts;
 - task-specific impact questions and scoring anchors;
@@ -540,19 +544,19 @@ Stage 1:
 
 Stage 2, only after Gate 1:
 
-- reproducible crossover assignments;
-- completed review sessions and blinded scores;
-- anonymized observation dataset;
+- reproducible single-reviewer condition assignment;
+- three completed review sessions and condition-masked initial scores;
+- observation dataset;
 - analysis script, results, and report;
 - deviations and missing-data report;
-- continue, narrow, pivot, or stop decision.
+- a formative recommendation to continue investigating, narrow, pivot, or stop, without an efficacy claim.
 
 ## Immediate implementation order
 
-1. Migrate the ParcelFlow fixture, task definitions, hidden tests, and templates into this repository with provenance.
-2. Replace the two-condition DSH-specific study runner with a harness-neutral three-condition runner.
-3. Define and test the frozen Pi run manifest and evidence cut.
-4. Implement matched P and R guide generation and claim-audit output.
-5. Rehearse `small-validation` end to end without participants.
-6. Run the medium and non-trivial Stage 1 trials.
-7. Evaluate Gate 1 before recruiting reviewers or hardening the Pi extension further.
+1. Verify the migrated ParcelFlow assets and harness-neutral three-condition runner.
+2. Finalize the frozen Pi run manifest and evidence cut around the first imported run.
+3. Implement matched P and R guide generation and claim-audit output.
+4. Rehearse `small-validation` end to end.
+5. Run the medium and non-trivial Stage 1 trials.
+6. Evaluate Gate 1 before reviewing the masked packets or hardening the Pi extension further.
+7. Complete the three single-reviewer sessions and publish a formative, non-causal report.

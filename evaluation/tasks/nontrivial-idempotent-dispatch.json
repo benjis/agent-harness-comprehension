@@ -1,0 +1,19 @@
+{
+  "id": "nontrivial-idempotent-dispatch",
+  "level": "non-trivial",
+  "title": "Make dispatch retries idempotent",
+  "prompt": "A caller may retry Dispatcher#dispatch with the same shipment id after losing the first response. Make dispatch idempotent across Dispatcher instances that share the same DispatchLog. A repeated shipment id must return the original route without reserving inventory or appending another log entry. Preserve the existing public dispatch call, persist enough information in DispatchLog, and add tests for a retry through a new Dispatcher instance. Assume one local process and do not add concurrency handling.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/dispatcher.rb", "lib/parcel_flow/dispatch_log.rb", "lib/parcel_flow/inventory.rb", "test/dispatcher_test.rb"],
+    "workflows": ["look up a shipment id before reserving inventory", "return the persisted route for a retry", "reserve and append only for a new shipment"],
+    "concepts": ["the dispatch log is the durable idempotency record", "idempotency spans Dispatcher instances", "route reuse precedes side effects"],
+    "invariants": ["one shipment id produces at most one reservation and one log entry"],
+    "defect_probes": ["retry through a new Dispatcher", "retry with empty inventory", "duplicate log entry"],
+    "impact_question": "If dispatch must later be safe across multiple processes, which current components and invariants are insufficient and where would coordination need to be introduced?",
+    "accepted_alternatives": ["persist and query the original route in DispatchLog", "introduce a separate durable idempotency store"],
+    "recoverability": {
+      "final_state": ["lookup-before-side-effect flow", "persisted route ownership", "cross-instance retry behavior"],
+      "runtime_only_if_observed": ["an in-memory deduplication approach that was rejected", "evidence that moved idempotency ownership into DispatchLog"]
+    }
+  }
+}

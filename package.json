@@ -17,8 +17,9 @@
   },
   "scripts": {
     "test": "vitest run",
+    "test:evaluation": "ruby evaluation/test/all_test.rb",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test && npm run test:evaluation"
   },
   "dependencies": {
     "typebox": "1.3.7"
@@ -35,4 +36,3 @@
     "vitest": "4.1.9"
   }
 }
-
