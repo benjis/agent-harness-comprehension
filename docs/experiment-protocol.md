@@ -604,6 +604,8 @@ Gate B passes only when the observable session contains the pre-registered insta
 
 Passing Gate A or B establishes only instrument capability under this artificial positive control. It does not reopen Stage 2, make the failed v1 runs eligible, or support an efficacy claim. A later natural-task gate or an explicit pivot decision remains required before reviewer sessions.
 
+Result recorded on 2026-08-20: the one permitted diagnostic passed Gate A and Gate B without a rerun. The run contained the induced instance-local hypothesis, expected cross-instance test failure, and a superseding shared-log revision. The bounded closure did not change source and added one task constraint after the initial invariant event had described the diagnostic procedure instead of the task invariant. All eight artifact claims were audited; the one trajectory claim was `runtime-unique` and `review-relevant`, while seven claims were supported by final-state evidence. The artificial run remains `audit-complete`, explicitly non-eligible for reviewer use, and separate from v1.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -612,4 +614,5 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 2. Completed on 2026-08-20: medium and non-trivial each produced no runtime-unique claim and missed required goal and constraint/invariant coverage; both failed their task-specific Gate 1 checks without reruns.
 3. Completed: generate each artifact set, audit every claim, and retain failures and costs.
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
-5. Selected on 2026-08-20: run the one bounded Instrument v2 diagnostic amendment above. Do not begin the single-reviewer sessions under either the failed v1 instrument or the artificial positive control.
+5. Completed on 2026-08-20: the one bounded Instrument v2 diagnostic passed both artificial capability gates without a rerun. It remains non-eligible and did not begin a reviewer session.
+6. Next decision: pre-register a natural-task v2 gate or pivot to simpler post-hoc evidence generation. Do not begin the single-reviewer sessions before that evidence decision and an applicable passing gate.

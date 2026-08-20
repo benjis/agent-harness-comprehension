@@ -4,7 +4,7 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: Gate 1 failed.** All three Artifact Pipeline v1 runs and claim audits are complete. Neither the medium nor non-trivial run produced a runtime-unique review-relevant claim, and both missed required goal and constraint/invariant coverage. Reviewer sessions remain blocked; no controlled evidence shows that execution-time capture improves human understanding.
+> **Current status: Gate 1 failed; the Instrument v2 artificial diagnostic passed.** All three Artifact Pipeline v1 runs remain ineligible. The one v2 positive control passed its separate closure and trajectory-capture gates, showing instrument capability only when a failure path is deliberately induced. Reviewer sessions remain blocked; no controlled evidence shows that execution-time capture improves human understanding.
 
 ## Current research step
 
@@ -18,7 +18,7 @@ The current study uses three ParcelFlow Ruby tasks and three matched review cond
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is the pre-registered Instrument v2 diagnostic iteration: a versioned closure-reliability check and one artificial trajectory positive control. This diagnostic will not reopen reviewer sessions or count as evidence of natural runtime benefit.
+Only one reviewer is currently available. The immediate next decision is whether to pre-register a natural-task v2 gate or pivot to simpler post-hoc evidence generation. The passed artificial diagnostic does not reopen reviewer sessions or count as evidence of natural runtime benefit.
 
 ## What exists
 

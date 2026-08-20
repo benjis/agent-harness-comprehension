@@ -27,8 +27,9 @@ Current work:
 3. Completed: run and audit `nontrivial-idempotent-dispatch`. It also contained no runtime-unique claim and missed required goal and constraint/invariant coverage.
 4. Completed: generate and audit all structured artifacts while retaining declared failures and costs.
 5. Completed: run the three-run gate. Small passed its applicable checks; medium and non-trivial each failed runtime uniqueness and semantic coverage, so Gate 1 failed and no reviewer packet may be opened.
-6. Selected: implement the one bounded Instrument v2 diagnostic amendment with separate closure-reliability and artificial trajectory-positive-control gates.
-7. Run the diagnostic once without pooling it with v1 or opening reviewer packets, then decide whether to attempt a later natural-task gate or pivot to post-hoc evidence generation.
+6. Completed: implement the one bounded Instrument v2 diagnostic amendment with separate closure-reliability and artificial trajectory-positive-control gates.
+7. Completed without rerun: both diagnostic gates passed, while the run remained separate from v1 and ineligible for reviewer packets.
+8. Decide whether to pre-register a natural-task v2 gate or pivot to post-hoc evidence generation before opening any reviewer session.
 
 Exit only if:
 
