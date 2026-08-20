@@ -39,7 +39,7 @@ Gate 1 is closed as failed. Its required exit conditions were not met:
 - contradicted or stale current-state claims remain below the protocol limit;
 - required semantic closure, matching, privacy, and failure-accounting checks pass.
 
-The bounded redesign allowance has been consumed. Do not add more runtime tasks, capture tuning, or reviewer runtime conditions under the current project decision.
+The bounded natural-prevalence redesign allowance has been consumed. Do not add more natural runtime tasks or capture tuning. The separately pre-registered hybrid pilot below permits only its two controlled conditional-value tasks.
 
 ## Next gate: hybrid conditional-value formative workflow
 

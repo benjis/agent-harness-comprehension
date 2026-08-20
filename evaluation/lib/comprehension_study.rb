@@ -11,6 +11,7 @@ require "time"
 module ComprehensionStudy
   ROOT = File.expand_path("..", __dir__)
   CONDITIONS = %w[ordinary post_hoc runtime].freeze
+  HYBRID_CONDITIONS = %w[post_hoc hybrid].freeze
   REVIEW_FIELDS = %w[
     component_model control_data_flow invariants impact_prediction defects review_decision
   ].freeze
@@ -237,16 +238,19 @@ module ComprehensionStudy
     COMMON_MATERIALS = %w[TASK.md diff.patch visible-tests.txt repository].freeze
 
     def build(run:, destination:, packet_id:, condition:)
-      raise ArgumentError, "unknown study condition" unless CONDITIONS.include?(condition)
+      raise ArgumentError, "unknown study condition" unless (CONDITIONS + ["hybrid"]).include?(condition)
       raise ArgumentError, "packet destination already exists" if File.exist?(destination)
 
       record = JsonFile.read(File.join(run, "run.json"))
-      raise ArgumentError, "only eligible trials can become review packets" unless record.fetch("trial_status") == "eligible"
+      eligible = record.fetch("trial_status") == "eligible" ||
+        (HYBRID_CONDITIONS.include?(condition) && record.fetch("trial_status") == "hybrid-pilot-eligible")
+      raise ArgumentError, "only eligible trials can become review packets" unless eligible
 
       FileUtils.mkdir_p(destination)
       COMMON_MATERIALS.each { |entry| FileUtils.cp_r(File.join(run, entry), destination) }
       if condition != "ordinary"
-        source = File.join(run, "guides", condition, "review-guide.md")
+        guide_condition = condition == "hybrid" ? "runtime" : condition
+        source = File.join(run, "guides", guide_condition, "review-guide.md")
         raise ArgumentError, "run has no #{condition} guide" unless File.file?(source)
 
         FileUtils.cp(source, File.join(destination, "review-guide.md"))
@@ -260,6 +264,70 @@ module ComprehensionStudy
       }
       JsonFile.write(File.join(destination, "packet.json"), manifest)
       manifest
+    end
+  end
+
+  class HybridAssignmentBuilder
+    def build(runs:, reviewer:, destination:, gate_report:)
+      raise ArgumentError, "hybrid pilot assignment requires exactly two runs" unless runs.length == HYBRID_CONDITIONS.length
+      raise ArgumentError, "invalid reviewer id" unless FormativeAssignmentBuilder::REVIEWER_ID.match?(reviewer)
+      raise ArgumentError, "study destination already exists" if File.exist?(destination)
+
+      gate = JsonFile.read(gate_report)
+      unless gate["gate"] == "hybrid-conditional-v1" && gate["passed"] == true && gate["reviewer_eligible"] == true
+        raise ArgumentError, "hybrid pilot assignment requires a passing gate report"
+      end
+      seed = gate.fetch("assignment_seed")
+      conditions = HYBRID_CONDITIONS.shuffle(random: Random.new(seed))
+      reviewer_root = File.join(destination, "reviewer")
+      packets_root = File.join(reviewer_root, "packets")
+      FileUtils.mkdir_p(packets_root)
+      assignments = runs.each_with_index.map do |run, index|
+        record = JsonFile.read(File.join(run, "run.json"))
+        registered_gate = record.fetch("hybrid_pilot_gate")
+        unless record["trial_status"] == "hybrid-pilot-eligible" && registered_gate["passed"] == true &&
+            File.realpath(registered_gate.fetch("report")) == File.realpath(gate_report)
+          raise ArgumentError, "run is not eligible under the supplied hybrid pilot gate"
+        end
+
+        packet_id = format("P%02d", index + 1)
+        condition = conditions.fetch(index)
+        PacketBuilder.new.build(
+          run: run,
+          destination: File.join(packets_root, packet_id),
+          packet_id: packet_id,
+          condition: condition
+        )
+        {
+          "packet_id" => packet_id,
+          "reviewer" => reviewer,
+          "task_id" => record.fetch("task_id"),
+          "level" => record.fetch("level"),
+          "condition" => condition,
+          "run_path" => File.realpath(run),
+          "hidden_tests" => record.fetch("hidden_tests"),
+          "hidden_test_failures" => record.fetch("hidden_test_failures")
+        }
+      end
+
+      public_rows = assignments.shuffle(random: Random.new(seed + 1)).map do |row|
+        { "packet_id" => row.fetch("packet_id"), "path" => File.join("packets", row.fetch("packet_id")) }
+      end
+      JsonFile.write(File.join(reviewer_root, "assignment.json"), {
+        "schema_version" => 2,
+        "reviewer" => reviewer,
+        "packets" => public_rows
+      })
+      key = {
+        "schema_version" => 2,
+        "study_mode" => "hybrid-conditional-formative",
+        "causal_inference" => "not-supported",
+        "seed" => seed,
+        "gate_report" => File.realpath(gate_report),
+        "assignments" => assignments
+      }
+      JsonFile.write(File.join(destination, "researcher-key.json"), key)
+      key
     end
   end
 

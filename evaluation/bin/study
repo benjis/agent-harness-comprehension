@@ -45,6 +45,14 @@ module StudyCli
       print_json ComprehensionStudy::NaturalTaskGate.new.evaluate(
         run: run_dir, registration: registration, destination: destination
       )
+    when "hybrid-gate"
+      raise ArgumentError, "usage: hybrid-gate OUTPUT_JSON REGISTRATION_JSON RUN_DIR RUN_DIR" unless arguments.length == 4
+
+      destination = arguments.shift
+      registration = arguments.shift
+      print_json ComprehensionStudy::HybridPilotGate.new.evaluate(
+        runs: arguments, registration: registration, destination: destination
+      )
     when "formative"
       raise ArgumentError, "usage: formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR" unless arguments.length == 5
 
@@ -55,6 +63,15 @@ module StudyCli
         reviewer: reviewer,
         destination: destination,
         seed: Integer(ENV.fetch("STUDY_SEED", "20260820"), 10)
+      )
+    when "hybrid-formative"
+      raise ArgumentError, "usage: hybrid-formative STUDY_DIR REVIEWER GATE_JSON RUN_DIR RUN_DIR" unless arguments.length == 5
+
+      destination = arguments.shift
+      reviewer = arguments.shift
+      gate_report = arguments.shift
+      print_json ComprehensionStudy::HybridAssignmentBuilder.new.build(
+        runs: arguments, reviewer: reviewer, destination: destination, gate_report: gate_report
       )
     when "review-start"
       packet, reviewer, session = exact!(arguments, 3, "review-start PACKET REVIEWER SESSION_JSON")
@@ -106,7 +123,9 @@ module StudyCli
       study gate OUTPUT_JSON RUN_DIR RUN_DIR RUN_DIR
       study diagnostic-gate RUN_DIR REGISTRATION_JSON OUTPUT_JSON
       study natural-gate RUN_DIR REGISTRATION_JSON OUTPUT_JSON
+      study hybrid-gate OUTPUT_JSON REGISTRATION_JSON RUN_DIR RUN_DIR
       study formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR
+      study hybrid-formative STUDY_DIR REVIEWER GATE_JSON RUN_DIR RUN_DIR
       study review-start PACKET REVIEWER SESSION_JSON
       study review-open SESSION_JSON PACKET_RELATIVE_PATH
       study review-finish SESSION_JSON ANSWERS_JSON

@@ -1,0 +1,19 @@
+{
+  "id": "nontrivial-atomic-log-append",
+  "level": "non-trivial",
+  "title": "Make dispatch-log append failure-atomic",
+  "prompt": "Make DispatchLog#append failure-atomic for one local process. Build the complete next JSON document before replacing the current log. Write it to a uniquely named temporary file in the same directory whose basename starts with .<log-basename>.tmp-, then replace the log with File.rename only after the write completes. If writing or renaming fails, preserve the prior log byte-for-byte, remove the temporary file, and re-raise the original exception. Preserve DispatchLog.new(path), successful append behavior, and entries. Add focused tests for a partial temporary-file write failure and cleanup. Do not add concurrency handling or recovery of temp files left by a killed process.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/dispatch_log.rb", "test/dispatch_log_test.rb"],
+    "workflows": ["read and build the next document", "write a same-directory temporary file", "rename only after the write succeeds", "clean the temporary file and re-raise on failure"],
+    "concepts": ["failure atomicity", "same-filesystem replacement", "temporary-file cleanup", "original exception identity"],
+    "invariants": ["a failed append preserves the prior log byte-for-byte", "a failed append leaves no task-owned temporary file", "a successful append remains readable through entries"],
+    "defect_probes": ["partial temporary write", "rename failure", "original exception identity", "successful repeated append"],
+    "impact_question": "Why does same-directory rename improve local failure atomicity but not provide durability against every filesystem or process failure?",
+    "accepted_alternatives": ["write a unique same-directory temporary path and File.rename it over the log"],
+    "recoverability": {
+      "final_state": ["temporary-file boundary", "rename ordering", "cleanup behavior", "failure tests"],
+      "runtime_only_if_observed": ["the direct-overwrite attempt corrupted the prior log", "the observed failure that caused the replacement-boundary revision"]
+    }
+  }
+}

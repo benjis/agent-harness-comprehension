@@ -150,6 +150,41 @@ class GuidesAndPacketsTest < Minitest::Test
     end
   end
 
+  def test_hybrid_gate_and_assignment_freeze_one_masked_packet_per_condition
+    Dir.mktmpdir("comprehension-hybrid-") do |directory|
+      tasks = %w[nontrivial-dispatch-log-rollback nontrivial-atomic-log-append]
+      runs = tasks.each_with_index.map { |task, index| prepare_hybrid_run(directory, task, index) }
+      registration = write_json(directory, "hybrid-registration.json", hybrid_registration)
+      gate_path = File.join(directory, "hybrid-gate.json")
+
+      report = ComprehensionStudy::HybridPilotGate.new.evaluate(
+        runs: runs, registration: registration, destination: gate_path
+      )
+
+      assert report.fetch("passed")
+      assert report.fetch("reviewer_eligible")
+      assert runs.all? { |run| read_json(File.join(run, "run.json"))["trial_status"] == "hybrid-pilot-eligible" }
+
+      study = File.join(directory, "study")
+      key = ComprehensionStudy::HybridAssignmentBuilder.new.build(
+        runs: runs, reviewer: "ben", destination: study, gate_report: gate_path
+      )
+      assert_equal "hybrid-conditional-formative", key.fetch("study_mode")
+      assert_equal %w[hybrid post_hoc], key.fetch("assignments").map { |row| row.fetch("condition") }.sort
+      key.fetch("assignments").each do |assignment|
+        packet = File.join(study, "reviewer", "packets", assignment.fetch("packet_id"))
+        manifest = read_json(File.join(packet, "packet.json"))
+        refute manifest.key?("condition")
+        guide = File.read(File.join(packet, "review-guide.md"))
+        expected_claim = assignment.fetch("condition") == "hybrid" ? "run-001" : "post-001"
+        assert_includes guide, expected_claim
+        refute_includes guide, "researcher-only"
+      end
+      public_assignment = read_json(File.join(study, "reviewer", "assignment.json"))
+      refute_includes public_assignment.to_s, "condition"
+    end
+  end
+
   def test_audit_rejects_an_omitted_claim
     Dir.mktmpdir("comprehension-audit-") do |directory|
       run, inputs = create_awaiting_run(directory, "small-validation", "small", 0)
@@ -349,6 +384,58 @@ class GuidesAndPacketsTest < Minitest::Test
     audit_path = write_json(directory, "audit.json", audit)
     ComprehensionStudy::ClaimAuditor.new.register(run: run, audit: audit_path)
     run
+  end
+
+  def prepare_hybrid_run(directory, task, index)
+    run, inputs = create_awaiting_run(directory, task, "non-trivial", index)
+    events = [
+      event("h#{index}", "hypothesis"),
+      event("f#{index}", "failure"),
+      event("r#{index}", "revision", "supersedes" => ["h#{index}"])
+    ]
+    File.write(
+      File.join(run, "research", "runtime-events.jsonl"),
+      events.map { |entry| JSON.generate(entry) }.join("\n") + "\n"
+    )
+    runtime = read_json(inputs.fetch(:runtime))
+    runtime.fetch("claims").first["evidence"] = events.map do |event_row|
+      { "source" => "runtime:#{event_row.fetch('id')}", "locator" => "controlled trajectory" }
+    end
+    ComprehensionStudy::JsonFile.write(inputs.fetch(:runtime), runtime)
+    ComprehensionStudy::ArtifactPipeline.new.register(run: run, **inputs)
+    audit = audit_document(task, include_history: true, runtime_unique: true)
+    audit.fetch("claims").find { |row| row["claim_id"] == "run-001" }["final_state_support"] = "not-verifiable"
+    ComprehensionStudy::ClaimAuditor.new.register(
+      run: run,
+      audit: write_json(directory, "hybrid-audit-#{index}.json", audit)
+    )
+    run
+  end
+
+  def hybrid_registration
+    task_rows = [
+      ["nontrivial-dispatch-log-rollback", "conditional-rollback-trajectory-v1", 0],
+      ["nontrivial-atomic-log-append", "conditional-atomic-log-trajectory-v1", 1]
+    ].map do |task, prompt, index|
+      {
+        "task_id" => task,
+        "prompt_version" => prompt,
+        "implementation_attempts" => 1,
+        "closure_attempted" => false,
+        "first_attempt_test_failed" => true,
+        "claim_id" => "run-001",
+        "hypothesis_event_id" => "h#{index}",
+        "failure_event_id" => "f#{index}",
+        "revision_event_id" => "r#{index}",
+        "failure_codes" => []
+      }
+    end
+    {
+      "schema_version" => 1,
+      "pilot" => "hybrid-conditional-v1",
+      "assignment_seed" => 20_260_820,
+      "tasks" => task_rows
+    }
   end
 
   def natural_registration(with_sequence:)

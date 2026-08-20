@@ -96,10 +96,10 @@ completed workspace + session ledger
  researcher-only ledger + hidden tests
            │ validate artifacts + render matched guides
            ▼
- claim audit + three-run Gate 1
+ claim audit + protocol-specific gate
            │ pass only
-           ▼
- O / P / R review packets
+           ├── historical O / P / R packets
+           └── current P / hybrid packets
            │ condition-masked review
            ▼
  formative session and score records
@@ -114,8 +114,9 @@ The classes under `evaluation/lib/` own this boundary:
 - `ClaimAuditor` requires an audit row for every generated claim. `FormativeGate` re-derives provenance hashes and both guides, evaluates one small, medium, and non-trivial run together, and is the only component that can mark those runs eligible.
 - `DiagnosticGate` evaluates the pre-registered Instrument v2 closure and artificial trajectory-positive-control checks on one audited non-trivial run. It verifies the ordered hypothesis, failure, and superseding revision but deliberately leaves the run at `audit-complete` with `reviewer_eligible: false`.
 - `NaturalTaskGate` validates the fixed phase order, bounded-closure boundary, and an audited pre-closure causal sequence. It emits `continue`, `pivot-post-hoc`, `inconclusive`, or `reviewer-study-ready` without changing run eligibility or constructing packets.
-- `PacketBuilder` gives every condition the same task, repository, diff, and visible tests. P and R each receive one identically named `review-guide.md`; O receives no guide.
-- `FormativeAssignmentBuilder`, `ReviewSession`, and `ResultAnalyzer` record the current one-reviewer workflow and explicitly prevent a causal or release decision.
+- `HybridPilotGate` evaluates exactly the two pre-registered controlled runs. It requires a complete hypothesis/failure/superseding-revision trajectory, exactly one audited runtime-unique claim per run, supported current-state claims, post-hoc recoverability, matched guides, and clean privacy and failure accounting. It is the only component that marks these runs `hybrid-pilot-eligible`.
+- `PacketBuilder` gives every condition the same task, repository, diff, and visible tests. P, R, and hybrid each receive one identically named `review-guide.md`; hybrid selects the audited runtime rendering. O receives no guide.
+- `HybridAssignmentBuilder` consumes a passing hybrid gate, uses its frozen seed, creates exactly one P and one hybrid packet, and keeps the condition mapping in the researcher key. `FormativeAssignmentBuilder`, `ReviewSession`, and `ResultAnalyzer` retain the historical workflow.
 
 Individual workspaces and run directories stay outside the repository. The reusable fixture, private task material, runner, and tests live under `evaluation/`. No earlier DSH repository or runtime is required.
 

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "pilot": "hybrid-conditional-v1",
+  "assignment_seed": 20260820,
+  "tasks": [
+    {
+      "task_id": "nontrivial-dispatch-log-rollback",
+      "prompt_version": "conditional-rollback-trajectory-v1",
+      "implementation_attempts": 1,
+      "closure_attempted": false,
+      "first_attempt_test_failed": true,
+      "claim_id": "run-001",
+      "hypothesis_event_id": "replace-with-observed-id",
+      "failure_event_id": "replace-with-observed-id",
+      "revision_event_id": "replace-with-observed-id",
+      "failure_codes": []
+    },
+    {
+      "task_id": "nontrivial-atomic-log-append",
+      "prompt_version": "conditional-atomic-log-trajectory-v1",
+      "implementation_attempts": 1,
+      "closure_attempted": false,
+      "first_attempt_test_failed": true,
+      "claim_id": "run-001",
+      "hypothesis_event_id": "replace-with-observed-id",
+      "failure_event_id": "replace-with-observed-id",
+      "revision_event_id": "replace-with-observed-id",
+      "failure_codes": []
+    }
+  ]
+}

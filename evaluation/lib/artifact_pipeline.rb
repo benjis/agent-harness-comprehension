@@ -812,4 +812,153 @@ module ComprehensionStudy
         .filter_map { |event| event["type"] }.uniq
     end
   end
+
+  class HybridPilotGate
+    TASKS = [
+      ["nontrivial-dispatch-log-rollback", "conditional-rollback-trajectory-v1"],
+      ["nontrivial-atomic-log-append", "conditional-atomic-log-trajectory-v1"]
+    ].freeze
+    TASK_KEYS = %w[
+      task_id prompt_version implementation_attempts closure_attempted first_attempt_test_failed
+      claim_id hypothesis_event_id failure_event_id revision_event_id failure_codes
+    ].freeze
+    FORBIDDEN_GUIDE_TEXT = [
+      "researcher-only", "conditional-rollback-trajectory", "conditional-atomic-log-trajectory",
+      "hidden test", "private rubric", "runtime-events.jsonl", "researcher-key", ".pi/"
+    ].freeze
+
+    def evaluate(runs:, registration:, destination:)
+      raise ArgumentError, "hybrid pilot requires exactly two runs" unless runs.length == TASKS.length
+      raise ArgumentError, "hybrid pilot report already exists" if File.exist?(destination)
+
+      records = runs.map { |run| JsonFile.read(File.join(run, "run.json")) }
+      expected_tasks = TASKS.map(&:first)
+      raise ArgumentError, "hybrid pilot runs are not in the pre-registered order" unless records.map { |row| row["task_id"] } == expected_tasks
+      raise ArgumentError, "hybrid pilot requires completed claim audits" unless records.all? { |row| row["trial_status"] == "audit-complete" }
+      raise ArgumentError, "hybrid pilot may only be registered once" if records.any? { |row| row.key?("hybrid_pilot_gate") }
+
+      data = JsonFile.read(registration)
+      registrations = validate_registration!(data)
+      results = runs.zip(records, registrations).map { |run, record, task| evaluate_run(run, record, task) }
+      passed = results.all? { |result| result.fetch("passed") }
+      report = {
+        "schema_version" => 1,
+        "gate" => "hybrid-conditional-v1",
+        "assignment_seed" => data.fetch("assignment_seed"),
+        "passed" => passed,
+        "reviewer_eligible" => passed,
+        "interpretation" => "conditional-usability-only; task-confounded",
+        "runs" => results
+      }
+      JsonFile.write(destination, report)
+
+      runs.zip(records).each do |run, record|
+        record["trial_status"] = passed ? "hybrid-pilot-eligible" : "hybrid-pilot-gate-failed"
+        record["hybrid_pilot_gate"] = {
+          "schema_version" => 1,
+          "passed" => passed,
+          "report" => File.expand_path(destination),
+          "reviewer_eligible" => passed
+        }
+        JsonFile.write(File.join(run, "run.json"), record)
+      end
+      report
+    end
+
+    private
+
+    def validate_registration!(data)
+      ArtifactContract.exact_keys!(data, %w[schema_version pilot assignment_seed tasks], "hybrid pilot registration")
+      raise ArgumentError, "hybrid pilot schema_version must be 1" unless data["schema_version"] == 1
+      raise ArgumentError, "unexpected hybrid pilot name" unless data["pilot"] == "hybrid-conditional-v1"
+      raise ArgumentError, "assignment seed must be 20260820" unless data["assignment_seed"] == 20_260_820
+      tasks = data["tasks"]
+      raise ArgumentError, "hybrid pilot registration requires two task rows" unless tasks.is_a?(Array) && tasks.length == TASKS.length
+
+      tasks.zip(TASKS).each do |task, (task_id, prompt_version)|
+        ArtifactContract.exact_keys!(task, TASK_KEYS, "hybrid pilot task registration")
+        raise ArgumentError, "unexpected hybrid pilot task order" unless task["task_id"] == task_id
+        raise ArgumentError, "unexpected controlled prompt version" unless task["prompt_version"] == prompt_version
+        raise ArgumentError, "implementation_attempts must be exactly 1" unless task["implementation_attempts"] == 1
+        raise ArgumentError, "closure must not be attempted" unless task["closure_attempted"] == false
+        raise ArgumentError, "the bounded first-attempt test failure must be recorded" unless task["first_attempt_test_failed"] == true
+        raise ArgumentError, "runtime claim must be run-001" unless task["claim_id"] == "run-001"
+        %w[hypothesis_event_id failure_event_id revision_event_id].each do |key|
+          value = task[key]
+          raise ArgumentError, "#{key} must be a non-empty string" unless value.is_a?(String) && !value.empty?
+        end
+        raise ArgumentError, "trajectory event ids must be distinct" unless task.values_at("hypothesis_event_id", "failure_event_id", "revision_event_id").uniq.length == 3
+        raise ArgumentError, "failure_codes must be an array of strings" unless task["failure_codes"].is_a?(Array) && task["failure_codes"].all? { |entry| entry.is_a?(String) }
+      end
+      tasks
+    end
+
+    def evaluate_run(run, record, registration)
+      events = File.readlines(File.join(run, "research", "runtime-events.jsonl"), chomp: true)
+        .reject(&:empty?).map { |line| JSON.parse(line) }
+      by_id = events.to_h { |event| [event.fetch("id"), event] }
+      trajectory_ids = registration.values_at("hypothesis_event_id", "failure_event_id", "revision_event_id")
+      trajectory = trajectory_ids.map { |id| by_id[id] }
+      semantic = events.select { |event| event["family"] == "semantic" }
+      ordered = trajectory.all? && trajectory.map { |event| semantic.index(event) }.all? &&
+        trajectory.map { |event| semantic.index(event) }.each_cons(2).all? { |left, right| left < right }
+
+      root = File.join(run, "research", "artifacts")
+      current = JsonFile.read(File.join(root, "current-state.json"))
+      post = JsonFile.read(File.join(root, "post-hoc-history.json"))
+      runtime = JsonFile.read(File.join(root, "runtime-history.json"))
+      audit = JsonFile.read(File.join(root, "claim-audit.json"))
+      manifest = JsonFile.read(File.join(root, "generation-manifest.json"))
+      audit_by_id = audit.fetch("claims").to_h { |row| [row.fetch("claim_id"), row] }
+      runtime_claims = runtime.fetch("claims")
+      runtime_claim = runtime_claims.first
+      runtime_audit = runtime_claim && audit_by_id[runtime_claim["id"]]
+      cited_ids = runtime_claim&.fetch("evidence", [])&.filter_map do |entry|
+        entry.fetch("source").delete_prefix("runtime:") if entry.fetch("source").start_with?("runtime:")
+      end || []
+      current_audits = current.fetch("claims").filter_map { |claim| audit_by_id[claim.fetch("id")] }
+      post_audits = post.fetch("claims").filter_map { |claim| audit_by_id[claim.fetch("id")] }
+      instrument = audit.fetch("instrument")
+      guide_paths = %w[post_hoc runtime].map { |condition| File.join(run, "guides", condition, "review-guide.md") }
+      guides = guide_paths.map { |path| File.binread(path) }
+      counts = manifest.fetch("guide_word_counts").values
+      larger = counts.max
+
+      checks = {
+        "artifact_integrity" => ArtifactIntegrity.new.verify(run),
+        "claim_audit_integrity" => ClaimAuditIntegrity.new.verify(run, record),
+        "visible_tests_passed" => record.fetch("visible_tests") == "passed",
+        "current_state_claims_supported" => current_audits.length == current.fetch("claims").length && current_audits.all? { |row| row["final_state_support"] == "supported" },
+        "post_hoc_claims_recoverable" => post_audits.length == post.fetch("claims").length && post_audits.all? { |row| row["recoverability"] == "post-hoc-recoverable" },
+        "no_high_severity_contradictions" => audit.fetch("claims").none? { |row| row["severity_if_wrong"] == "high" && row["final_state_support"] == "contradicted" },
+        "exactly_one_runtime_claim" => runtime_claims.length == 1 && runtime_claim&.fetch("id", nil) == registration.fetch("claim_id"),
+        "runtime_claim_unique_relevant" => !!(runtime_audit && runtime_audit["recoverability"] == "runtime-unique" &&
+          runtime_audit["runtime_support"] == "observed-transition" &&
+          %w[review-relevant critical].include?(runtime_audit["decision_relevance"])),
+        "runtime_claim_not_verifiable_from_final_state" => !!(runtime_audit && runtime_audit["final_state_support"] == "not-verifiable"),
+        "trajectory_events_exist_and_ordered" => !!ordered,
+        "trajectory_types_match" => trajectory.map { |event| event&.fetch("type", nil) } == %w[hypothesis failure revision],
+        "single_controlled_trajectory" => semantic.count { |event| event["type"] == "hypothesis" } == 1 &&
+          semantic.count { |event| event["type"] == "failure" } == 1 &&
+          semantic.count { |event| event["type"] == "revision" } == 1 &&
+          semantic.none? { |event| event["type"] == "alternative" },
+        "revision_supersedes_hypothesis" => Array(trajectory[2]&.fetch("supersedes", nil)).include?(registration.fetch("hypothesis_event_id")),
+        "runtime_claim_cites_full_trajectory" => trajectory_ids.all? { |id| cited_ids.include?(id) },
+        "single_bounded_attempt_recorded" => registration.fetch("implementation_attempts") == 1 && registration.fetch("first_attempt_test_failed") && !registration.fetch("closure_attempted"),
+        "no_registered_failures" => registration.fetch("failure_codes").empty?,
+        "no_pipeline_or_privacy_failures" => %w[capture_failures renderer_failures prohibited_data_findings unaccounted_failures].all? { |key| instrument.fetch(key).empty? },
+        "matched_guides_within_budget" => counts.all? { |count| count <= 750 } && (larger.zero? || (counts.max - counts.min).fdiv(larger) <= 0.10),
+        "shared_current_state_rendering" => guides.map { |guide| guide.split("## Decisions, revisions, and rejected paths", 2).first }.uniq.length == 1,
+        "reviewer_guides_exclude_researcher_material" => guides.none? { |guide| FORBIDDEN_GUIDE_TEXT.any? { |text| guide.downcase.include?(text.downcase) } }
+      }
+      {
+        "task_id" => record.fetch("task_id"),
+        "level" => record.fetch("level"),
+        "passed" => checks.values.all?,
+        "hidden_tests" => record.fetch("hidden_tests"),
+        "hidden_test_failures" => record.fetch("hidden_test_failures"),
+        "checks" => checks
+      }
+    end
+  end
 end

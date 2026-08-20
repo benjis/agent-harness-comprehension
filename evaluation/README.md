@@ -4,13 +4,12 @@ This directory contains the self-contained Ruby evaluation assets for [`docs/exp
 
 ## Study boundary
 
-The current setup has one reviewer. It is a formative self-study: it can validate packet generation, timing, scoring, artifact defects, and individual cases, but it cannot estimate a causal treatment effect. Each of the three tasks is reviewed once under one of the three conditions:
+The current setup has one reviewer. It is a formative self-study: it can validate packet generation, timing, scoring, artifact defects, and individual cases, but it cannot estimate a causal treatment effect. The active hybrid pilot reviews two controlled tasks once each:
 
-- `ordinary` — task, frozen repository, diff, and visible tests;
 - `post_hoc` — ordinary materials plus a final-evidence-only guide;
-- `runtime` — ordinary materials plus a matched runtime-enhanced guide.
+- `hybrid` — the same final-state guide shape with one audited runtime-unique trajectory substituted into its history section.
 
-The condition assignment remains hidden inside `researcher-key.json` until the review sessions are complete.
+The fixed seed assigns one task to each condition. The mapping remains hidden inside `researcher-key.json` until both review sessions and initial scores are complete. The older three-condition commands remain available only for the frozen Artifact Pipeline v1 record.
 
 ## Verify the harness
 
@@ -103,7 +102,41 @@ Phase 1 emits `continue` only for a valid medium run with a pre-closure runtime 
 
 Recorded result: the valid phase-1 `medium-normalized-item-validation` run emitted `pivot-post-hoc` because it contained no natural causal sequence or runtime-unique claim. Per the fail-fast rule, do not prepare or run phase 2. The frozen report contains three unmet subchecks as `null`; this was a boolean-serialization defect only, the decision was unchanged, and current code emits `false`.
 
-## Build the one-reviewer assignment
+## Run the hybrid conditional-value pilot
+
+Prepare fresh workspaces in this exact order and run their researcher-only prompts once:
+
+```sh
+evaluation/bin/study prepare nontrivial-dispatch-log-rollback /absolute/path/to/workspaces/rollback
+evaluation/bin/study prepare nontrivial-atomic-log-append /absolute/path/to/workspaces/atomic-log
+```
+
+Use `prompts/conditional-rollback-trajectory-v1.md` for the first workspace and `prompts/conditional-atomic-log-trajectory-v1.md` for the second. Do not run `closure-v2`, do not induce another failed path, and do not rerun either implementation. Import, generate, and audit both runs through the ordinary commands above. Copy `schemas/hybrid-pilot-registration-v1.example.json`, replace only the observed event IDs, and run:
+
+```sh
+evaluation/bin/study hybrid-gate \
+  /absolute/path/to/hybrid-gate.json \
+  /absolute/path/to/hybrid-registration.json \
+  /absolute/path/to/runs/rollback \
+  /absolute/path/to/runs/atomic-log
+```
+
+The aggregate gate requires supported current-state claims, post-hoc-recoverable P history, exactly one audited runtime-unique and review-relevant trajectory claim per run, ordered hypothesis/failure/revision events with explicit supersession, matched guides, visible-test success, and clean privacy and failure accounting. Hidden-test results are recorded but non-gating. A failure freezes both runs as failed and forbids packet construction.
+
+After a pass, build both masked packets without starting either review session:
+
+```sh
+evaluation/bin/study hybrid-formative \
+  /absolute/path/to/study \
+  ben \
+  /absolute/path/to/hybrid-gate.json \
+  /absolute/path/to/runs/rollback \
+  /absolute/path/to/runs/atomic-log
+```
+
+Keep `researcher-key.json`, run directories, raw ledgers, intervention prompts, hidden-test outputs, and rubrics closed until both reviewer answers and initial scores are frozen.
+
+## Historical three-condition assignment
 
 After all three runs are eligible:
 
