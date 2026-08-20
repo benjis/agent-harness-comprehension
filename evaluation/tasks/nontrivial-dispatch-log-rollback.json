@@ -1,0 +1,19 @@
+{
+  "id": "nontrivial-dispatch-log-rollback",
+  "level": "non-trivial",
+  "title": "Roll back inventory when dispatch logging fails",
+  "prompt": "DispatchLog#append may raise after Dispatcher has reserved inventory. Make Dispatcher#dispatch failure-atomic for that case: restore exactly the quantities reserved for the shipment and re-raise the original append exception. Do not compensate when inventory reservation itself does not complete. Preserve successful dispatch behavior and the public dispatch call, add the smallest supporting Inventory API needed, and add focused tests with a failing log. Assume one local process and do not add concurrency handling.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/dispatcher.rb", "lib/parcel_flow/inventory.rb", "test/dispatcher_test.rb", "test/inventory_test.rb"],
+    "workflows": ["reserve before routing and append", "compensate only an append failure after successful reservation", "re-raise the original append exception", "leave successful dispatch unchanged"],
+    "concepts": ["compensating action", "reservation completion boundary", "original exception identity", "exact quantity restoration"],
+    "invariants": ["a failed log append leaves inventory as it was before dispatch", "a reservation failure is not compensated by Dispatcher"],
+    "defect_probes": ["append exception identity", "multi-SKU restoration", "reservation failure before append", "successful dispatch"],
+    "impact_question": "If Inventory and DispatchLog later become separate remote services, why is this local compensation insufficient and where would durable coordination belong?",
+    "accepted_alternatives": ["rescue append failure around a completed reservation and call Inventory#release", "use an Inventory reservation object with an explicit rollback operation"],
+    "recoverability": {
+      "final_state": ["compensation boundary", "release API", "exception propagation", "rollback tests"],
+      "runtime_only_if_observed": ["an over-broad rescue that compensated a reservation failure", "evidence that changed the rollback boundary or API"]
+    }
+  }
+}

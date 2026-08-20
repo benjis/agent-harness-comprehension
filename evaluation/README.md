@@ -88,6 +88,19 @@ evaluation/bin/study diagnostic-gate \
 
 The report evaluates Gate A closure reliability and Gate B trajectory capture separately. It requires the runtime claim to cite the ordered hypothesis, failure, and superseding revision. A pass records `reviewer_eligible: false` and leaves the run at `audit-complete`; this artificial positive control cannot open a reviewer packet or be pooled with the v1 runs.
 
+## Run the fail-fast natural-task v2 gate
+
+Use `prompts/natural-implementation-v1.md` without trajectory guidance, followed by `prompts/closure-v2.md` in the same settled session. After artifact registration and exhaustive claim audit, copy `schemas/natural-gate-registration-v1.example.json` and register the closure boundary plus any audited natural causal sequence:
+
+```sh
+evaluation/bin/study natural-gate \
+  /absolute/path/to/runs/natural-medium \
+  /absolute/path/to/natural-gate-registration.json \
+  /absolute/path/to/natural-medium-gate.json
+```
+
+Phase 1 emits `continue` only for a valid medium run with a pre-closure runtime increment; a valid uniqueness failure emits `pivot-post-hoc`, and operational invalidity emits `inconclusive`. Phase 2 additionally requires the passing phase-1 report. Even two passes only emit `reviewer-study-ready`: both runs remain `audit-complete` and `reviewer_eligible: false` until the user explicitly starts the reviewer workflow.
+
 ## Build the one-reviewer assignment
 
 After all three runs are eligible:

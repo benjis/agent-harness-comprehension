@@ -1,0 +1,19 @@
+{
+  "id": "medium-normalized-item-validation",
+  "level": "medium",
+  "title": "Validate normalized shipment items",
+  "prompt": "Shipment accepts item keys as strings or symbols and normalizes them to strings. Reject input when two distinct keys normalize to the same SKU instead of silently overwriting one quantity. Also reject every quantity that is not a positive integer. Preserve the existing empty-shipment error, keep the normalized items frozen, and add focused tests.",
+  "rubric": {
+    "necessary_files": ["lib/parcel_flow/shipment.rb", "test/shipment_test.rb"],
+    "workflows": ["validate original item entries", "detect collisions during key normalization", "publish frozen normalized items only after validation"],
+    "concepts": ["string and symbol keys can normalize to one SKU", "positive integer quantity", "validation precedes assignment"],
+    "invariants": ["one normalized SKU has exactly one unambiguous positive quantity"],
+    "defect_probes": ["symbol and string collision", "zero or negative quantity", "non-integer quantity", "frozen normalized items"],
+    "impact_question": "If Shipment later accepts aliases that map several external SKUs to one canonical SKU, where should collision policy live and which current invariant would need to change?",
+    "accepted_alternatives": ["compare normalized-key cardinality before building the final hash", "build the normalized hash while rejecting a key already seen"],
+    "recoverability": {
+      "final_state": ["validation order", "collision behavior", "quantity rules", "frozen normalized state"],
+      "runtime_only_if_observed": ["a normalization approach that silently overwrote a quantity", "a validation strategy rejected after observable evidence"]
+    }
+  }
+}

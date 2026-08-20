@@ -116,6 +116,39 @@ class GuidesAndPacketsTest < Minitest::Test
     end
   end
 
+  def test_natural_gate_continues_after_a_valid_runtime_increment_without_granting_eligibility
+    Dir.mktmpdir("comprehension-natural-") do |directory|
+      run = prepare_natural_run(directory, with_sequence: true)
+      registration = write_json(directory, "registration.json", natural_registration(with_sequence: true))
+
+      report = ComprehensionStudy::NaturalTaskGate.new.evaluate(
+        run: run, registration: registration, destination: File.join(directory, "gate.json")
+      )
+
+      assert report.fetch("passed")
+      assert_equal "continue", report.fetch("decision")
+      record = read_json(File.join(run, "run.json"))
+      assert_equal "audit-complete", record.fetch("trial_status")
+      refute record.dig("natural_gate", "reviewer_eligible")
+    end
+  end
+
+  def test_natural_gate_pivots_after_a_valid_run_without_a_runtime_increment
+    Dir.mktmpdir("comprehension-natural-") do |directory|
+      run = prepare_natural_run(directory, with_sequence: false)
+      registration = write_json(directory, "registration.json", natural_registration(with_sequence: false))
+
+      report = ComprehensionStudy::NaturalTaskGate.new.evaluate(
+        run: run, registration: registration, destination: File.join(directory, "gate.json")
+      )
+
+      assert report.fetch("valid")
+      refute report.fetch("runtime_increment")
+      refute report.fetch("passed")
+      assert_equal "pivot-post-hoc", report.fetch("decision")
+    end
+  end
+
   def test_audit_rejects_an_omitted_claim
     Dir.mktmpdir("comprehension-audit-") do |directory|
       run, inputs = create_awaiting_run(directory, "small-validation", "small", 0)
@@ -271,6 +304,74 @@ class GuidesAndPacketsTest < Minitest::Test
         "revision_event_id" => "e4",
         "expected_test_failed" => true,
         "final_visible_tests_passed" => true
+      }
+    }
+  end
+
+  def prepare_natural_run(directory, with_sequence:)
+    run, inputs = create_awaiting_run(directory, "medium-normalized-item-validation", "medium", 0)
+    events = if with_sequence
+      [
+        event("e1", "goal"),
+        event("e2", "hypothesis"),
+        event("e3", "failure"),
+        event("e4", "revision", "supersedes" => ["e2"], "because" => ["focused test failed"]),
+        event("e5", "decision"),
+        event("e6", "invariant"),
+        event("e7", "validation")
+      ]
+    else
+      [event("e1", "goal"), event("e2", "decision"), event("e3", "invariant"), event("e4", "validation")]
+    end
+    events << {
+      "id" => "x1", "timestamp" => "2026-08-20T00:01:00Z", "family" => "execution",
+      "type" => "session_started", "summary" => "closure session started"
+    }
+    File.write(
+      File.join(run, "research", "runtime-events.jsonl"),
+      events.map { |entry| JSON.generate(entry) }.join("\n") + "\n"
+    )
+    runtime = read_json(inputs.fetch(:runtime))
+    if with_sequence
+      runtime.fetch("claims").first["evidence"] = %w[e2 e4].map do |id|
+        { "source" => "runtime:#{id}", "locator" => "natural causal sequence" }
+      end
+    end
+    ComprehensionStudy::JsonFile.write(inputs.fetch(:runtime), runtime)
+    ComprehensionStudy::ArtifactPipeline.new.register(run: run, **inputs)
+    audit = audit_document(
+      "medium-normalized-item-validation", include_history: true, runtime_unique: with_sequence
+    )
+    if with_sequence
+      audit.fetch("claims").find { |claim| claim.fetch("claim_id") == "run-001" }["final_state_support"] = "not-verifiable"
+    end
+    audit_path = write_json(directory, "audit.json", audit)
+    ComprehensionStudy::ClaimAuditor.new.register(run: run, audit: audit_path)
+    run
+  end
+
+  def natural_registration(with_sequence:)
+    {
+      "schema_version" => 1,
+      "instrument_version" => "instrument-v2",
+      "task_id" => "medium-normalized-item-validation",
+      "phase" => 1,
+      "prior_gate_report" => nil,
+      "prompt_versions" => {
+        "implementation" => "natural-implementation-v1",
+        "closure" => "closure-v2"
+      },
+      "closure" => {
+        "attempted" => true,
+        "start_event_id" => "x1",
+        "event_ids" => with_sequence ? %w[e1 e5 e6 e7] : %w[e1 e2 e3 e4],
+        "source_modified" => false,
+        "final_state_support" => "supported",
+        "failure_codes" => []
+      },
+      "natural_sequence" => {
+        "claim_id" => with_sequence ? "run-001" : nil,
+        "event_ids" => with_sequence ? %w[e2 e4] : []
       }
     }
   end

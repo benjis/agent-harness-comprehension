@@ -627,4 +627,189 @@ module ComprehensionStudy
       end
     end
   end
+
+  class NaturalTaskGate
+    TASKS = {
+      1 => "medium-normalized-item-validation",
+      2 => "nontrivial-dispatch-log-rollback"
+    }.freeze
+    REQUIRED_PROMPTS = {
+      "implementation" => "natural-implementation-v1",
+      "closure" => "closure-v2"
+    }.freeze
+
+    def evaluate(run:, registration:, destination:)
+      raise ArgumentError, "natural gate report already exists" if File.exist?(destination)
+      record = JsonFile.read(File.join(run, "run.json"))
+      raise ArgumentError, "natural gate requires a completed claim audit" unless record.fetch("trial_status") == "audit-complete"
+      raise ArgumentError, "natural gate may only be registered once" if record.key?("natural_gate")
+      data = JsonFile.read(registration)
+      validate_registration!(data, record)
+
+      events = File.readlines(File.join(run, "research", "runtime-events.jsonl"), chomp: true)
+        .reject(&:empty?).map { |line| JSON.parse(line) }
+      by_id = events.to_h { |event| [event.fetch("id"), event] }
+      semantic = events.select { |event| event["family"] == "semantic" }
+      audit = JsonFile.read(File.join(run, "research", "artifacts", "claim-audit.json"))
+      manifest = JsonFile.read(File.join(run, "research", "artifacts", "generation-manifest.json"))
+      runtime = JsonFile.read(File.join(run, "research", "artifacts", "runtime-history.json"))
+      current_ids = JsonFile.read(File.join(run, "research", "artifacts", "current-state.json"))
+        .fetch("claims").map { |claim| claim.fetch("id") }
+      current_audits = audit.fetch("claims").select { |claim| current_ids.include?(claim.fetch("claim_id")) }
+      stale_rate = current_audits.count { |claim| %w[contradicted stale].include?(claim.fetch("final_state_support")) }.fdiv(current_audits.length)
+
+      closure = data.fetch("closure")
+      closure_start = by_id[closure.fetch("start_event_id")]
+      closure_events = closure.fetch("event_ids").filter_map { |id| by_id[id] }
+      current_types = current_semantic_types(semantic)
+      instrument = audit.fetch("instrument")
+      validity_checks = {
+        "artifact_integrity" => ArtifactIntegrity.new.verify(run),
+        "claim_audit_integrity" => ClaimAuditIntegrity.new.verify(run, record),
+        "visible_tests_passed" => record.fetch("visible_tests") == "passed",
+        "closure_attempted" => closure.fetch("attempted"),
+        "closure_start_exists" => closure_start&.fetch("family", nil) == "execution" && closure_start&.fetch("type", nil) == "session_started",
+        "closure_did_not_modify_source" => !closure.fetch("source_modified"),
+        "closure_claims_supported_by_final_state" => closure.fetch("final_state_support") == "supported",
+        "no_closure_failures" => closure.fetch("failure_codes").empty?,
+        "closure_event_ids_exist" => closure_events.length == closure.fetch("event_ids").length,
+        "required_semantic_coverage" => %w[goal decision validation].all? { |type| current_types.include?(type) } &&
+          current_types.any? { |type| %w[constraint invariant].include?(type) },
+        "current_state_error_rate_below_5_percent" => stale_rate < 0.05,
+        "no_high_severity_contradictions" => audit.fetch("claims").none? do |claim|
+          claim.fetch("severity_if_wrong") == "high" && claim.fetch("final_state_support") == "contradicted"
+        end,
+        "no_pipeline_or_privacy_failures" => %w[capture_failures renderer_failures prohibited_data_findings unaccounted_failures]
+          .all? { |key| instrument.fetch(key).empty? },
+        "matched_guides_within_budget" => manifest.fetch("guide_word_counts").values.all? { |count| count <= 750 }
+      }
+
+      sequence = data.fetch("natural_sequence")
+      sequence_events = sequence.fetch("event_ids").filter_map { |id| by_id[id] }
+      boundary_index = closure_start && events.index(closure_start)
+      pre_closure = boundary_index && sequence_events.length == sequence.fetch("event_ids").length &&
+        sequence_events.all? { |event| events.index(event) < boundary_index }
+      ordered_semantic = sequence_events.select { |event| event["family"] == "semantic" }.sort_by { |event| events.index(event) }
+      causal_pair = ordered_semantic.each_with_index.any? do |origin, index|
+        next false unless %w[hypothesis alternative failure].include?(origin["type"])
+
+        ordered_semantic.drop(index + 1).any? do |later|
+          %w[decision revision].include?(later["type"]) &&
+            (Array(later["supersedes"]).include?(origin["id"]) || !Array(later["because"]).empty?)
+        end
+      end
+      runtime_claim = runtime.fetch("claims").find { |claim| claim["id"] == sequence["claim_id"] }
+      cited_ids = runtime_claim&.fetch("evidence", [])&.filter_map do |entry|
+        entry.fetch("source").delete_prefix("runtime:") if entry.fetch("source").start_with?("runtime:")
+      end || []
+      audit_row = audit.fetch("claims").find { |claim| claim["claim_id"] == sequence["claim_id"] }
+      increment_checks = {
+        "natural_sequence_registered" => sequence["claim_id"].is_a?(String) && sequence.fetch("event_ids").length >= 2,
+        "sequence_events_exist" => sequence_events.length == sequence.fetch("event_ids").length,
+        "sequence_precedes_closure" => !!pre_closure,
+        "causal_sequence_present" => causal_pair,
+        "runtime_claim_cites_sequence" => runtime_claim && sequence.fetch("event_ids").all? { |id| cited_ids.include?(id) },
+        "runtime_unique_relevant_claim" => audit_row && audit_row.fetch("recoverability") == "runtime-unique" &&
+          %w[review-relevant critical].include?(audit_row.fetch("decision_relevance")),
+        "not_equivalently_supported_by_final_state" => audit_row && audit_row.fetch("final_state_support") == "not-verifiable"
+      }
+
+      valid = validity_checks.values.all?
+      increment = increment_checks.values.all?
+      decision = if !valid
+        "inconclusive"
+      elsif !increment
+        "pivot-post-hoc"
+      elsif data.fetch("phase") == 1
+        "continue"
+      else
+        "reviewer-study-ready"
+      end
+      report = {
+        "schema_version" => 1,
+        "gate" => "natural-task-v2",
+        "task_id" => record.fetch("task_id"),
+        "phase" => data.fetch("phase"),
+        "valid" => valid,
+        "runtime_increment" => increment,
+        "passed" => valid && increment,
+        "decision" => decision,
+        "validity_checks" => validity_checks,
+        "increment_checks" => increment_checks,
+        "hidden_tests" => "researcher-only, non-gating"
+      }
+      JsonFile.write(destination, report)
+      record["natural_gate"] = {
+        "schema_version" => 1,
+        "passed" => report.fetch("passed"),
+        "decision" => decision,
+        "report" => File.expand_path(destination),
+        "reviewer_eligible" => false
+      }
+      JsonFile.write(File.join(run, "run.json"), record)
+      report
+    end
+
+    private
+
+    def validate_registration!(data, record)
+      ArtifactContract.exact_keys!(
+        data,
+        %w[schema_version instrument_version task_id phase prior_gate_report prompt_versions closure natural_sequence],
+        "natural gate registration"
+      )
+      raise ArgumentError, "natural gate schema_version must be 1" unless data["schema_version"] == 1
+      raise ArgumentError, "instrument_version must be instrument-v2" unless data["instrument_version"] == "instrument-v2"
+      phase = data["phase"]
+      raise ArgumentError, "natural gate phase must be 1 or 2" unless TASKS.key?(phase)
+      expected_task = TASKS.fetch(phase)
+      raise ArgumentError, "unexpected task for natural gate phase" unless data["task_id"] == expected_task && record["task_id"] == expected_task
+      validate_prior_gate!(phase, data["prior_gate_report"])
+      ArtifactContract.exact_keys!(data["prompt_versions"], REQUIRED_PROMPTS.keys, "natural gate prompt versions")
+      raise ArgumentError, "unexpected natural gate prompt versions" unless data["prompt_versions"] == REQUIRED_PROMPTS
+      ArtifactContract.exact_keys!(
+        data["closure"],
+        %w[attempted start_event_id event_ids source_modified final_state_support failure_codes],
+        "natural gate closure"
+      )
+      ArtifactContract.exact_keys!(data["natural_sequence"], %w[claim_id event_ids], "natural causal sequence")
+      closure = data["closure"]
+      %w[start_event_id].each { |key| require_text!(closure[key], key) }
+      raise ArgumentError, "closure event_ids must be unique strings" unless string_array?(closure["event_ids"]) && closure["event_ids"].uniq.length == closure["event_ids"].length
+      raise ArgumentError, "closure failure_codes must be strings" unless string_array?(closure["failure_codes"], allow_empty: true)
+      raise ArgumentError, "closure final_state_support must be supported or unsupported" unless %w[supported unsupported].include?(closure["final_state_support"])
+      %w[attempted source_modified].each { |key| raise ArgumentError, "closure #{key} must be boolean" unless [true, false].include?(closure[key]) }
+      sequence = data["natural_sequence"]
+      unless sequence["claim_id"].nil? || (sequence["claim_id"].is_a?(String) && !sequence["claim_id"].empty?)
+        raise ArgumentError, "natural sequence claim_id must be null or a non-empty string"
+      end
+      raise ArgumentError, "natural sequence event_ids must be unique strings" unless string_array?(sequence["event_ids"], allow_empty: true) && sequence["event_ids"].uniq.length == sequence["event_ids"].length
+    end
+
+    def validate_prior_gate!(phase, path)
+      if phase == 1
+        raise ArgumentError, "phase 1 must not have a prior gate report" unless path.nil?
+        return
+      end
+      raise ArgumentError, "phase 2 requires a prior gate report" unless path.is_a?(String) && File.file?(path)
+      prior = JsonFile.read(path)
+      unless prior["gate"] == "natural-task-v2" && prior["task_id"] == TASKS.fetch(1) && prior["passed"] == true && prior["decision"] == "continue"
+        raise ArgumentError, "phase 2 requires a passing phase 1 report"
+      end
+    end
+
+    def require_text!(value, label)
+      raise ArgumentError, "#{label} must be a non-empty string" unless value.is_a?(String) && !value.empty?
+    end
+
+    def string_array?(value, allow_empty: false)
+      value.is_a?(Array) && (allow_empty || !value.empty?) && value.all? { |entry| entry.is_a?(String) && !entry.empty? }
+    end
+
+    def current_semantic_types(events)
+      superseded = events.flat_map { |event| Array(event["supersedes"]) }
+      events.reject { |event| %w[refuted superseded].include?(event["status"]) || superseded.include?(event["id"]) }
+        .filter_map { |event| event["type"] }.uniq
+    end
+  end
 end

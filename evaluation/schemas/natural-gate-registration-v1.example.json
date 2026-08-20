@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "instrument_version": "instrument-v2",
+  "task_id": "medium-normalized-item-validation",
+  "phase": 1,
+  "prior_gate_report": null,
+  "prompt_versions": {
+    "implementation": "natural-implementation-v1",
+    "closure": "closure-v2"
+  },
+  "closure": {
+    "attempted": true,
+    "start_event_id": "exec-closure-session-start",
+    "event_ids": ["sem-goal", "sem-decision", "sem-invariant", "sem-validation"],
+    "source_modified": false,
+    "final_state_support": "supported",
+    "failure_codes": []
+  },
+  "natural_sequence": {
+    "claim_id": "run-001",
+    "event_ids": ["sem-hypothesis", "sem-revision"]
+  }
+}

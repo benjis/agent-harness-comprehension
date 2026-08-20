@@ -28,7 +28,7 @@ Only one reviewer is currently available. The immediate next step is the pre-reg
 - An append-only per-session `events.jsonl` ledger with stable IDs and explicit supersession.
 - A deterministic `mental-model.md` renderer plus `/comprehension` and `/comprehension-status`.
 - Focused TypeScript tests for schema, persistence, reconciliation, rendering, and extension behavior.
-- A DSH-independent Ruby evaluation harness that prepares ParcelFlow tasks, imports completed Pi runs, freezes tracked and untracked changes, validates structured artifacts, deterministically renders matched guides, audits every claim, enforces Gate 1, evaluates the non-eligible Instrument v2 diagnostic, builds condition-masked packets, records review sessions, and produces formative analysis.
+- A DSH-independent Ruby evaluation harness that prepares ParcelFlow tasks, imports completed Pi runs, freezes tracked and untracked changes, validates structured artifacts, deterministically renders matched guides, audits every claim, enforces Gate 1, evaluates the non-eligible Instrument v2 diagnostic and natural-task gate, builds condition-masked packets, records review sessions, and produces formative analysis.
 
 The prototype does **not** capture prompts, assistant messages, raw tool outputs, credentials, or private chain-of-thought. Source code and observed behavior remain authoritative.
 
