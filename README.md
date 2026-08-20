@@ -43,7 +43,7 @@ The prototype does **not** capture prompts, assistant messages, raw tool outputs
 
 ## Try the Pi prototype
 
-Requirements: Node.js 22.19 or newer and Pi 0.84.x.
+Requirements: Node.js 24.19 or newer and Pi 0.84.x.
 
 ```sh
 npm install
