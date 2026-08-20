@@ -101,6 +101,8 @@ evaluation/bin/study natural-gate \
 
 Phase 1 emits `continue` only for a valid medium run with a pre-closure runtime increment; a valid uniqueness failure emits `pivot-post-hoc`, and operational invalidity emits `inconclusive`. Phase 2 additionally requires the passing phase-1 report. Even two passes only emit `reviewer-study-ready`: both runs remain `audit-complete` and `reviewer_eligible: false` until the user explicitly starts the reviewer workflow.
 
+Recorded result: the valid phase-1 `medium-normalized-item-validation` run emitted `pivot-post-hoc` because it contained no natural causal sequence or runtime-unique claim. Per the fail-fast rule, do not prepare or run phase 2. The frozen report contains three unmet subchecks as `null`; this was a boolean-serialization defect only, the decision was unchanged, and current code emits `false`.
+
 ## Build the one-reviewer assignment
 
 After all three runs are eligible:

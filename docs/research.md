@@ -4,7 +4,7 @@
 
 Coding agents can shorten the time required to produce a working change. They do not automatically shorten the time required for a human to understand, verify, maintain, and safely extend that change. This project calls the accumulating gap **comprehension debt**.
 
-The project tests whether a small comprehension layer inside an agent harness can preserve decision-relevant evidence during execution and later render a more useful mental model than a developer can obtain from code, diffs, tests, and post-hoc summaries alone. The prototype records typed semantic checkpoints alongside compact lifecycle and tool metadata, stores them in an append-only ledger, and deterministically reconciles current conclusions with superseded history.
+The project initially tested whether a small comprehension layer inside an agent harness could preserve decision-relevant evidence during execution and later render a more useful mental model than a developer could obtain from final-state evidence alone. The artificial diagnostic established capture capability, but repeated natural runs produced no reliable runtime information increment. The active research direction now pivots to revision-pinned post-hoc guides generated only from frozen tasks, code, diffs, and tests.
 
 The hypothesis is unproven. The artifact may be redundant, noisy, costly, incomplete, or misleading. Those are first-class possible results.
 
@@ -52,7 +52,9 @@ For non-trivial agent-generated changes, a harness-integrated comprehension laye
 
 The expected benefit is not a more polished narrative. It is improved ability to explain architecture, predict change impact, localize bugs, identify invariants, calibrate confidence, and justify review decisions independently of the agent's recommendation.
 
-## Why execution-time structured evidence may help
+Current interpretation: the formative artifact gates do not support continuing this execution-time hypothesis. Artifact Pipeline v1 produced no runtime-unique claim in its natural medium or non-trivial runs. Instrument v2 could capture a deliberately induced transition, but its first valid natural task again produced no unique causal information and triggered the pre-registered stop. The active, narrower hypothesis is now that a revision-pinned post-hoc guide may improve understanding over ordinary materials at lower and more reliable cost; this replacement hypothesis remains untested and requires separate pre-registration.
+
+## Why execution-time structured evidence was tested
 
 Post-hoc analysis—including a skill such as Agentic Survivor—starts from residues: the final source tree, diff, tests, and perhaps an unstructured transcript. It must infer which observations changed the plan, which constraint forced a design choice, and whether an abandoned path still appears relevant.
 
@@ -74,6 +76,8 @@ The current investigation covers:
 - human evaluation of completed software changes.
 
 The first adapter targets Pi. The research question is harness-agnostic, but portability has not been demonstrated.
+
+No further runtime-capture runs are planned under the current research decision. The implemented extension and negative artifacts remain as feasibility and falsification evidence; the active scope is revision-pinned post-hoc evidence generation and its later formative evaluation.
 
 ## Non-goals
 
@@ -124,6 +128,7 @@ The evidence establishes feasibility, not human benefit:
 - the `nontrivial-idempotent-dispatch` run produced a passing implementation, 68 execution events, 2 semantic events, matched 221/232-word guides, and 11 supported audited claims; it also contributed no runtime-unique claim and recorded neither a goal nor a constraint/invariant checkpoint while adding 2 tool calls, 2 turns, 10,559 attributable tokens, about 19.8 seconds, and 22,871 bytes of capture artifacts;
 - the formal three-run Artifact Pipeline v1 gate failed: all 32 audited claims were supported and the integrity, accuracy, privacy, matching, and failure-accounting checks passed, but both medium and non-trivial runs failed the runtime-unique and required-semantic-coverage checks; reviewer sessions are therefore blocked;
 - the one pre-registered Instrument v2 artificial positive control passed its closure and trajectory-capture gates: closure supplied supported current semantic coverage without modifying source, and the induced failure-to-revision path yielded one audited runtime-unique review-relevant claim; the run recorded 106 execution and 8 semantic events, 56,581 attributable tokens, about $0.066 attributable cost, about $0.132 total Pi cost, and 35,528 bytes of capture artifacts; the initial invariant described the diagnostic procedure rather than the task and required one closure event; this is instrument capability evidence only;
+- the fail-fast Instrument v2 natural gate stopped after its first fresh medium task: the implementation, visible tests, hidden tests, artifact integrity, closure coverage, privacy, matching, and all 8 audited claims passed, but its 4 semantic events contained only decision, validation, closure-added goal, and closure-added invariant; there was no natural causal sequence and the runtime claim was post-hoc-recoverable; capture added 4 tool calls, 4 turns, 52,328 attributable tokens, about 26 seconds, about $0.044 attributable cost, and 26,435 bytes, while total implementation-plus-closure Pi cost was about $0.120;
 - no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
 
-The next research step is the pre-registered fail-fast natural-task v2 gate. One fresh medium task runs first; only a natural runtime information increment permits the fresh non-trivial task. A valid uniqueness failure triggers the post-hoc pivot, while operational invalidity remains inconclusive. Reviewer sessions stay blocked. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).
+The execution-time information-increment claim is stopped under the current design. The next research step is to pre-register a revision-pinned ordinary-versus-post-hoc formative protocol. Reviewer sessions stay blocked until that replacement protocol is frozen. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

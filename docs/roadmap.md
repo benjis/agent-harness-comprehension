@@ -1,6 +1,6 @@
 # Roadmap
 
-The project has **failed Gate 1 under Artifact Pipeline v1**. Engineering work remains gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
+The project has **stopped the runtime-capture claim and selected a post-hoc pivot**. Artifact Pipeline v1 failed, Instrument v2 passed only an artificial positive control, and the first valid natural v2 task again produced no runtime information increment.
 
 ## Completed foundation
 
@@ -29,24 +29,26 @@ Current work:
 5. Completed: run the three-run gate. Small passed its applicable checks; medium and non-trivial each failed runtime uniqueness and semantic coverage, so Gate 1 failed and no reviewer packet may be opened.
 6. Completed: implement the one bounded Instrument v2 diagnostic amendment with separate closure-reliability and artificial trajectory-positive-control gates.
 7. Completed without rerun: both diagnostic gates passed, while the run remained separate from v1 and ineligible for reviewer packets.
-8. Selected: run the pre-registered fail-fast natural-task v2 gate, beginning with `medium-normalized-item-validation` and continuing only after a natural runtime information increment.
-9. On a valid uniqueness failure, pivot immediately to revision-pinned post-hoc evidence and stop further runtime capture. Only two passing natural tasks may make the project reviewer-study-ready.
+8. Completed without rerun: `medium-normalized-item-validation` was valid but contained no natural causal sequence or runtime-unique claim.
+9. Stop rule applied: phase 2 was not run, runtime capture research stopped, and the revision-pinned post-hoc pivot was selected.
 
-Exit only if:
+Gate 1 is closed as failed. Its required exit conditions were not met:
 
 - medium and non-trivial tasks each contain a confirmed runtime-unique, review-relevant claim;
 - neither guide contains a high-severity contradicted current-state claim;
 - contradicted or stale current-state claims remain below the protocol limit;
 - required semantic closure, matching, privacy, and failure-accounting checks pass.
 
-If the gate fails because capture is malformed, allow one bounded redesign under a new instrument version. If it fails because runtime information is not unique or useful, pivot to a revision-pinned post-hoc guide or stop the execution-time claim.
+The bounded redesign allowance has been consumed. Do not add more runtime tasks, capture tuning, or reviewer runtime conditions under the current project decision.
 
-## Gate 2: single-reviewer formative workflow
+## Next gate: revision-pinned post-hoc formative workflow
 
-Only after Gate 1:
+Before any reviewer session:
 
-- generate one O, P, and R assignment across the three tasks;
-- complete three condition-masked review sessions;
+- pre-register fresh or safely reusable frozen tasks, ordinary and post-hoc packet rules, review questions, scoring, thresholds, and a stopping rule;
+- generate post-hoc guides only from the frozen task, repository, diff, and visible tests;
+- exclude runtime ledgers, runtime claims, induced trajectories, hidden tests, private rubrics, and researcher keys from reviewer packets;
+- complete the user-started condition-masked review sessions only after packet integrity passes;
 - freeze answers and initial scores before opening the researcher key;
 - report timing, files opened, correctness, confidence, cognitive load, artifact defects, and protocol deviations;
 - publish the result as formative and causally uninterpretable.

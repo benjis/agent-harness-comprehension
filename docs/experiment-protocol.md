@@ -635,6 +635,12 @@ Fail-fast decision rule:
 
 Record all natural implementation, semantic capture, closure, generation, storage, failure, and missing-telemetry costs. Hidden tests remain researcher-only costs and do not determine natural-gate eligibility.
 
+Result recorded on 2026-08-20: phase 1 was a valid run and failed the runtime information-increment checks without a rerun. The natural implementation recorded only a final decision and validation; closure added supported goal and invariant events without modifying source, but no hypothesis, alternative, failure, revision, supersession, or pre-closure causal sequence occurred. All eight artifact claims were supported by final-state evidence, and the sole runtime claim was `post-hoc-recoverable`. The gate emitted `pivot-post-hoc`; phase 2 `nontrivial-dispatch-log-rollback` was not prepared or run, runtime capture research stopped, and no reviewer packet or session was opened.
+
+The original gate report serialized three unmet increment subchecks as `null` rather than `false`. Both values are false in the evaluator's conjunction, so `runtime_increment: false` and `pivot-post-hoc` were unaffected. The original report remains frozen; the serializer and regression test were corrected afterward without rerunning the study.
+
+The next operational protocol must be a separately pre-registered revision-pinned post-hoc study. It may compare ordinary materials with a guide generated only from frozen final-state evidence, but it must not reuse runtime history, claim a causal transition, or begin reviewer activity before its tasks, packet rules, questions, thresholds, and stopping rule are frozen.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -644,4 +650,5 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 3. Completed: generate each artifact set, audit every claim, and retain failures and costs.
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
 5. Completed on 2026-08-20: the one bounded Instrument v2 diagnostic passed both artificial capability gates without a rerun. It remains non-eligible and did not begin a reviewer session.
-6. Selected on 2026-08-20: execute the fail-fast natural-task v2 gate above. Do not begin reviewer sessions during the gate.
+6. Completed on 2026-08-20: natural phase 1 was valid but contained no runtime information increment, so the pre-registered stop rule selected the post-hoc pivot and prevented phase 2.
+7. Next: pre-register the replacement revision-pinned post-hoc formative protocol. Do not build packets or begin reviewer sessions before it is frozen.

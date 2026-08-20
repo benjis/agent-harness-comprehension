@@ -4,21 +4,21 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: Gate 1 failed; the Instrument v2 artificial diagnostic passed.** All three Artifact Pipeline v1 runs remain ineligible. The one v2 positive control passed its separate closure and trajectory-capture gates, showing instrument capability only when a failure path is deliberately induced. Reviewer sessions remain blocked; no controlled evidence shows that execution-time capture improves human understanding.
+> **Current status: runtime capture stopped; post-hoc pivot selected.** Instrument v2 passed an artificial positive control, but the first valid natural-task run produced no runtime information increment and triggered the pre-registered fail-fast stop. The second natural task was not run. Reviewer sessions remain blocked while a revision-pinned post-hoc study is separately pre-registered.
 
 ## Current research step
 
-The immediate question is narrower than “does a comprehension summary help?”:
+The immediate question has narrowed after the runtime gate failed:
 
-> Does runtime capture preserve reliable, review-relevant causal information that cannot be recovered with equivalent confidence from the frozen task, repository, diff, and tests?
+> Can a revision-pinned guide generated only from the frozen task, repository, diff, and tests improve review understanding enough to justify its cost over ordinary materials?
 
-The current study uses three ParcelFlow Ruby tasks and three matched review conditions:
+The superseded runtime study used three matched conditions:
 
 - ordinary review materials;
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is the pre-registered fail-fast natural-task v2 gate: one fresh medium task, followed by one fresh non-trivial task only if the medium run produces a natural runtime information increment. A valid uniqueness failure triggers the post-hoc pivot; reviewer sessions remain blocked during this gate.
+Only one reviewer is currently available. The immediate next step is to pre-register a two-condition ordinary-versus-post-hoc formative study using revision-pinned final-state evidence. Do not build packets or begin the reviewer session until that replacement protocol is frozen.
 
 ## What exists
 
