@@ -1,6 +1,6 @@
 # Roadmap
 
-The project has **stopped the runtime-capture claim and selected a post-hoc pivot**. Artifact Pipeline v1 failed, Instrument v2 passed only an artificial positive control, and the first valid natural v2 task again produced no runtime information increment.
+The project has **stopped the natural runtime-prevalence claim and selected a hybrid pilot**. Post-hoc final-state evidence is the default base; runtime is an optional audited addendum whose conditional reviewer value remains untested.
 
 ## Completed foundation
 
@@ -41,14 +41,17 @@ Gate 1 is closed as failed. Its required exit conditions were not met:
 
 The bounded redesign allowance has been consumed. Do not add more runtime tasks, capture tuning, or reviewer runtime conditions under the current project decision.
 
-## Next gate: revision-pinned post-hoc formative workflow
+## Next gate: hybrid conditional-value formative workflow
 
 Before any reviewer session:
 
-- pre-register fresh or safely reusable frozen tasks, ordinary and post-hoc packet rules, review questions, scoring, thresholds, and a stopping rule;
-- generate post-hoc guides only from the frozen task, repository, diff, and visible tests;
-- exclude runtime ledgers, runtime claims, induced trajectories, hidden tests, private rubrics, and researcher keys from reviewer packets;
-- complete the user-started condition-masked review sessions only after packet integrity passes;
+- complete the two pre-registered controlled non-trivial runs without closure or reruns;
+- generate a final-state base for both and exactly one audited runtime-unique trajectory claim per run;
+- pass the hybrid artifact, privacy, matching, and claim-integrity gate;
+- deterministically assign one post-hoc and one hybrid packet and freeze the researcher key;
+- exclude raw runtime ledgers, intervention prompts, hidden tests, private rubrics, and researcher keys from reviewer packets;
+- include the audited trajectory only in the hybrid guide, without exposing the intervention;
+- complete the user-started condition-masked review sessions only after both packets pass integrity;
 - freeze answers and initial scores before opening the researcher key;
 - report timing, files opened, correctness, confidence, cognitive load, artifact defects, and protocol deviations;
 - publish the result as formative and causally uninterpretable.

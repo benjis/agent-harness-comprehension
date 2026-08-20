@@ -52,7 +52,7 @@ For non-trivial agent-generated changes, a harness-integrated comprehension laye
 
 The expected benefit is not a more polished narrative. It is improved ability to explain architecture, predict change impact, localize bugs, identify invariants, calibrate confidence, and justify review decisions independently of the agent's recommendation.
 
-Current interpretation: the formative artifact gates do not support continuing this execution-time hypothesis. Artifact Pipeline v1 produced no runtime-unique claim in its natural medium or non-trivial runs. Instrument v2 could capture a deliberately induced transition, but its first valid natural task again produced no unique causal information and triggered the pre-registered stop. The active, narrower hypothesis is now that a revision-pinned post-hoc guide may improve understanding over ordinary materials at lower and more reliable cost; this replacement hypothesis remains untested and requires separate pre-registration.
+Current interpretation: the formative artifact gates do not support a claim that useful runtime trajectories occur reliably in the tested natural tasks. They do show that controlled trajectories can be captured. Runtime and post-hoc evidence are therefore treated as complementary: a revision-pinned post-hoc model is the default base, and audited runtime-unique history is an optional addendum. The active, narrower hypothesis is that this addendum may improve reviewer understanding when a verifiable trajectory exists; natural prevalence remains a separate negative result.
 
 ## Why execution-time structured evidence was tested
 
@@ -77,7 +77,7 @@ The current investigation covers:
 
 The first adapter targets Pi. The research question is harness-agnostic, but portability has not been demonstrated.
 
-No further runtime-capture runs are planned under the current research decision. The implemented extension and negative artifacts remain as feasibility and falsification evidence; the active scope is revision-pinned post-hoc evidence generation and its later formative evaluation.
+No further natural-prevalence runs are planned under the current research decision. Exactly two controlled runtime-rich runs are allowed for the pre-registered conditional-value pilot. The active product shape is a revision-pinned post-hoc base with an optional audited runtime addendum.
 
 ## Non-goals
 
@@ -131,4 +131,4 @@ The evidence establishes feasibility, not human benefit:
 - the fail-fast Instrument v2 natural gate stopped after its first fresh medium task: the implementation, visible tests, hidden tests, artifact integrity, closure coverage, privacy, matching, and all 8 audited claims passed, but its 4 semantic events contained only decision, validation, closure-added goal, and closure-added invariant; there was no natural causal sequence and the runtime claim was post-hoc-recoverable; capture added 4 tool calls, 4 turns, 52,328 attributable tokens, about 26 seconds, about $0.044 attributable cost, and 26,435 bytes, while total implementation-plus-closure Pi cost was about $0.120;
 - no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
 
-The execution-time information-increment claim is stopped under the current design. The next research step is to pre-register a revision-pinned ordinary-versus-post-hoc formative protocol. Reviewer sessions stay blocked until that replacement protocol is frozen. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).
+The natural runtime-prevalence claim remains stopped. The next research step is the pre-registered hybrid conditional-value pilot, which tests one post-hoc case against one post-hoc-plus-runtime case under controlled trajectory availability. Reviewer sessions stay blocked until both packets are frozen. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

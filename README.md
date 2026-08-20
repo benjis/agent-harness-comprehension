@@ -4,13 +4,13 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: runtime capture stopped; post-hoc pivot selected.** Instrument v2 passed an artificial positive control, but the first valid natural-task run produced no runtime information increment and triggered the pre-registered fail-fast stop. The second natural task was not run. Reviewer sessions remain blocked while a revision-pinned post-hoc study is separately pre-registered.
+> **Current status: hybrid conditional-value pilot pre-registered.** Natural runtime prevalence remained low and the fail-fast gate stopped, but runtime and post-hoc are now treated as complementary: every run gets a final-state base, while one controlled pilot condition receives an audited runtime-unique addendum. Reviewer sessions remain blocked until two fresh runs and packets are frozen.
 
 ## Current research step
 
-The immediate question has narrowed after the runtime gate failed:
+The immediate question now separates prevalence from conditional value:
 
-> Can a revision-pinned guide generated only from the frozen task, repository, diff, and tests improve review understanding enough to justify its cost over ordinary materials?
+> When a verifiable trajectory exists, does adding its audited runtime history to a revision-pinned post-hoc guide improve reviewer understanding enough to justify the extra reading and capture cost?
 
 The superseded runtime study used three matched conditions:
 
@@ -18,7 +18,7 @@ The superseded runtime study used three matched conditions:
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is to pre-register a two-condition ordinary-versus-post-hoc formative study using revision-pinned final-state evidence. Do not build packets or begin the reviewer session until that replacement protocol is frozen.
+Only one reviewer is currently available. The immediate next step is to prepare two condition-masked pilot packets: one post-hoc base and one post-hoc base with a runtime-unique addendum. The two controlled trajectories test conditional usability only, not natural occurrence. Do not begin reviewer sessions until both packets are frozen.
 
 ## What exists
 

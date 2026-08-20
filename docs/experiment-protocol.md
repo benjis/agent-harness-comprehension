@@ -641,6 +641,29 @@ The original gate report serialized three unmet increment subchecks as `null` ra
 
 The next operational protocol must be a separately pre-registered revision-pinned post-hoc study. It may compare ordinary materials with a guide generated only from frozen final-state evidence, but it must not reuse runtime history, claim a causal transition, or begin reviewer activity before its tasks, packet rules, questions, thresholds, and stopping rule are frozen.
 
+## Protocol amendment 3: hybrid conditional-value pilot
+
+Status: pre-registered on 2026-08-20 after the natural-task stop and before the second controlled task, hybrid artifact contract, pilot gate, condition assignment, or either pilot run was created. This prospectively narrows the post-hoc-only direction without changing the valid natural prevalence result.
+
+The pilot tests conditional reviewer value, not natural trajectory prevalence. Post-hoc current-state evidence is the required base for every run; runtime history is an optional audited addendum only when an observable trajectory exists. Automatic execution events remain passive. Semantic tool calls record only the bounded controlled transition. Do not run `closure-v2`: goal, invariant, impact, and validation coverage belongs to the final-state post-hoc artifact rather than the runtime ledger.
+
+Use exactly two fresh non-trivial ParcelFlow tasks in this fixed order:
+
+1. the already frozen but unrun `nontrivial-dispatch-log-rollback` task;
+2. `nontrivial-atomic-log-append`, which requires same-directory temporary-file replacement so a failed append preserves the prior DispatchLog and cleans temporary files.
+
+Each researcher-only implementation instruction induces exactly one plausible, bounded first attempt and one visible failure before normal correction. The rollback task first uses an over-broad compensation boundary, then tests that reservation failure must not be compensated. The atomic-log task first overwrites the log directly, then injects a write failure that demonstrates corruption before revision to temporary-file replacement. Record the hypothesis or decision, observable failure, and superseding revision; do not induce a second path. These interventions and their costs remain researcher-only and cannot support a natural-prevalence claim.
+
+For each frozen run, generate one shared current-state model from `TASK.md`, repository, diff, and visible tests. Generate a post-hoc history from the same final-state cut and a runtime history from the ledger. The runtime history must contain exactly one audited `runtime-unique`, `review-relevant` or `critical` trajectory claim citing the pre-settlement sequence. Both rendered guides must remain within 750 words and within the existing 10% matching tolerance; all differences outside the history section are forbidden.
+
+The pilot gate passes only if both implementations and visible tests pass; artifact and exhaustive claim-audit integrity pass; all current-state claims are supported with no high-severity contradiction; both controlled trajectories are present and correctly superseded; both runtime claims are audited as runtime-unique and not verifiable from final-state evidence; matching, privacy, and failure accounting pass; and no reviewer materials contain the intervention prompts, hidden tests, private rubrics, raw sessions, or researcher keys. Hidden-test outcomes remain non-gating costs.
+
+After both runs pass, assign exactly one `post_hoc` packet and one `hybrid` packet with deterministic seed `20260820`. Both packets contain the same material classes and one `review-guide.md`; `post_hoc` uses final-state history and `hybrid` substitutes the audited runtime trajectory history. The condition mapping stays in the researcher key. Packet construction does not start a reviewer session.
+
+The single reviewer completes each task once. Freeze answers, time, files opened, confidence, cognitive load, and artifact-defect reports before opening the key. Report per-case correctness and whether the hybrid reviewer independently identifies the failed path, causal revision, affected invariant, and review implication. With one reviewer and one task per condition, the result is descriptive and task-confounded: it can show conditional usability or a clear failure, but not a treatment effect.
+
+Stop after the two packets and two user-started sessions. Do not add tasks, swap conditions, regenerate guides, or rerun implementations after outcomes. A promising hybrid case may justify a later multi-reviewer study; a non-useful or misleading addendum leaves post-hoc as the default product and runtime as optional research telemetry.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -651,4 +674,4 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
 5. Completed on 2026-08-20: the one bounded Instrument v2 diagnostic passed both artificial capability gates without a rerun. It remains non-eligible and did not begin a reviewer session.
 6. Completed on 2026-08-20: natural phase 1 was valid but contained no runtime information increment, so the pre-registered stop rule selected the post-hoc pivot and prevented phase 2.
-7. Next: pre-register the replacement revision-pinned post-hoc formative protocol. Do not build packets or begin reviewer sessions before it is frozen.
+7. Selected on 2026-08-20: execute the hybrid conditional-value pilot above. Do not start reviewer sessions until both controlled runs, audits, gate, assignment, and packets are frozen.
