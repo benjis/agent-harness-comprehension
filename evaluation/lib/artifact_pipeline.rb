@@ -668,7 +668,7 @@ module ComprehensionStudy
         "claim_audit_integrity" => ClaimAuditIntegrity.new.verify(run, record),
         "visible_tests_passed" => record.fetch("visible_tests") == "passed",
         "closure_attempted" => closure.fetch("attempted"),
-        "closure_start_exists" => closure_start&.fetch("family", nil) == "execution" && closure_start&.fetch("type", nil) == "session_started",
+        "closure_start_exists" => !!(closure_start&.fetch("family", nil) == "execution" && closure_start&.fetch("type", nil) == "session_started"),
         "closure_did_not_modify_source" => !closure.fetch("source_modified"),
         "closure_claims_supported_by_final_state" => closure.fetch("final_state_support") == "supported",
         "no_closure_failures" => closure.fetch("failure_codes").empty?,
@@ -708,10 +708,10 @@ module ComprehensionStudy
         "sequence_events_exist" => sequence_events.length == sequence.fetch("event_ids").length,
         "sequence_precedes_closure" => !!pre_closure,
         "causal_sequence_present" => causal_pair,
-        "runtime_claim_cites_sequence" => runtime_claim && sequence.fetch("event_ids").all? { |id| cited_ids.include?(id) },
-        "runtime_unique_relevant_claim" => audit_row && audit_row.fetch("recoverability") == "runtime-unique" &&
-          %w[review-relevant critical].include?(audit_row.fetch("decision_relevance")),
-        "not_equivalently_supported_by_final_state" => audit_row && audit_row.fetch("final_state_support") == "not-verifiable"
+        "runtime_claim_cites_sequence" => !!(runtime_claim && sequence.fetch("event_ids").all? { |id| cited_ids.include?(id) }),
+        "runtime_unique_relevant_claim" => !!(audit_row && audit_row.fetch("recoverability") == "runtime-unique" &&
+          %w[review-relevant critical].include?(audit_row.fetch("decision_relevance"))),
+        "not_equivalently_supported_by_final_state" => !!(audit_row && audit_row.fetch("final_state_support") == "not-verifiable")
       }
 
       valid = validity_checks.values.all?

@@ -146,6 +146,7 @@ class GuidesAndPacketsTest < Minitest::Test
       refute report.fetch("runtime_increment")
       refute report.fetch("passed")
       assert_equal "pivot-post-hoc", report.fetch("decision")
+      assert report.fetch("increment_checks").values.all? { |value| value == true || value == false }
     end
   end
 
