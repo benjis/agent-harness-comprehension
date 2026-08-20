@@ -16,6 +16,7 @@ This suggests an important distinction: putting a human **in the decision loop**
 
 - [Thesis and research note](docs/thesis-or-research-note.md) — the comprehension-debt problem, hypothesis, scope, non-goals, and falsification criteria.
 - [Experiment plan](docs/experiment-plan.md) — baseline-versus-treatment methodology, measurements, scoring, and threats to validity.
+- [Experiment protocol v2](docs/experiment-protocol-v2.md) — the operational Pi-based artifact-discrimination study, matched review conditions, human pilot, and decision gates.
 - [Architecture](docs/architecture.md) — event flow, ledger, deterministic reconciliation, commands, and data boundary.
 - [Roadmap](docs/roadmap.md) — current prototype status and evidence-gated milestones.
 
