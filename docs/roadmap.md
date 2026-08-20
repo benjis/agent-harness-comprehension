@@ -23,10 +23,11 @@ No controlled human-comprehension benefit has been established.
 Current work:
 
 1. Completed: rehearse `small-validation` end to end with the implemented artifact and audit contracts. The rehearsal produced 10 fully audited claims, matched 164/182-word guides, and no runtime-unique claim; the run remains researcher-only outside the repository.
-2. Run frozen Pi implementations for `medium-atomic-reservation` and `nontrivial-idempotent-dispatch`.
-3. Generate the structured artifacts once per run and retain all declared failures and costs.
-4. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
-5. Run the implemented three-run gate before opening any reviewer packet.
+2. Completed: run and audit `medium-atomic-reservation`. Its implementation and tests passed, but it contained no runtime-unique claim and missed required goal and constraint/invariant semantic coverage; retain this negative result without rerunning it.
+3. Run and audit the frozen `nontrivial-idempotent-dispatch` implementation.
+4. Generate the structured artifacts once per run and retain all declared failures and costs.
+5. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
+6. Run the implemented three-run gate before opening any reviewer packet.
 
 Exit only if:
 
