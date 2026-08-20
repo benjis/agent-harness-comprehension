@@ -125,4 +125,4 @@ The evidence establishes feasibility, not human benefit:
 - the formal three-run Artifact Pipeline v1 gate failed: all 32 audited claims were supported and the integrity, accuracy, privacy, matching, and failure-accounting checks passed, but both medium and non-trivial runs failed the runtime-unique and required-semantic-coverage checks; reviewer sessions are therefore blocked;
 - no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
 
-The next research decision is whether one bounded capture redesign can address the missing transition and closure evidence under a new pre-registered instrument version, or whether the project should pivot to post-hoc evidence generation. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).
+The next research step is the pre-registered Instrument v2 diagnostic iteration: a versioned closure-reliability check plus one artificial trajectory positive control. It tests capture capability when a transition is guaranteed, not natural prevalence or reviewer benefit. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

@@ -583,6 +583,27 @@ Stage 2, only after Gate 1:
 - deviations and missing-data report;
 - a formative recommendation to continue investigating, narrow, pivot, or stop, without an efficacy claim.
 
+## Protocol amendment 1: Instrument v2 diagnostic iteration
+
+Status: pre-registered on 2026-08-20 after Artifact Pipeline v1 Gate 1 failed and before any Instrument v2 run. This amendment does not replace, pool with, or reinterpret the three failed v1 runs.
+
+Instrument v2 separates two prerequisite questions that v1 combined:
+
+1. **Gate A — closure reliability:** can one explicitly versioned post-settlement closure step produce a supported current goal, final decision, invariant or constraint, and validation record without inventing trajectory evidence?
+2. **Gate B — trajectory positive control:** when one plausible but intentionally induced failed path is guaranteed to occur, can the runtime ledger preserve the failure and causal revision as a review-relevant claim that the frozen final materials cannot support with equivalent confidence?
+
+The diagnostic uses `nontrivial-idempotent-dispatch` with the same public task and fixture. A researcher-only implementation instruction requires exactly one bounded initial attempt using Dispatcher instance-local idempotency state, followed by the public cross-instance retry test. The expected failure is that a new Dispatcher does not share that state. After observing the failure, the agent may correct the implementation normally. It must not be steered toward any second failed path.
+
+The induced instruction, failed attempt, observable test output, correction, intervention cost, and any instruction noncompliance remain researcher-only and are reported as artificial diagnostic conditions. They are not reviewer materials, evidence of natural transition prevalence, or evidence that runtime guides improve comprehension.
+
+After implementation settles, run one versioned closure prompt in the same Pi session. The closure step must not modify source. It requests supported current events for goal, final decision, invariant or constraint, and validation, reusing existing eligible events instead of duplicating them. It may not create a failure, revision, rejected alternative, or supersession link that is not already supported by observable session history.
+
+Gate A passes only when the current semantic ledger contains `goal`, `decision`, `validation`, and at least one of `constraint` or `invariant`; every closure claim is supported by the frozen final evidence; and no high-severity contradiction, privacy finding, or unaccounted closure failure exists.
+
+Gate B passes only when the observable session contains the pre-registered instance-local attempt, its cross-instance failure, and a later revision that supersedes the failed hypothesis or decision; the audited runtime history contains at least one `runtime-unique`, `review-relevant` or `critical` claim grounded in those ordered events; and the final implementation and visible tests pass. If the model skips the induced path, the expected test does not fail, the transition is not captured, or the closure step fabricates evidence, report the diagnostic as failed without rerunning it.
+
+Passing Gate A or B establishes only instrument capability under this artificial positive control. It does not reopen Stage 2, make the failed v1 runs eligible, or support an efficacy claim. A later natural-task gate or an explicit pivot decision remains required before reviewer sessions.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -591,4 +612,4 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 2. Completed on 2026-08-20: medium and non-trivial each produced no runtime-unique claim and missed required goal and constraint/invariant coverage; both failed their task-specific Gate 1 checks without reruns.
 3. Completed: generate each artifact set, audit every claim, and retain failures and costs.
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
-5. Next decision: pre-register one bounded capture redesign under a new instrument version, or pivot to post-hoc evidence generation. Do not begin the single-reviewer sessions under the failed instrument.
+5. Selected on 2026-08-20: run the one bounded Instrument v2 diagnostic amendment above. Do not begin the single-reviewer sessions under either the failed v1 instrument or the artificial positive control.

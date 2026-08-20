@@ -18,7 +18,7 @@ The current study uses three ParcelFlow Ruby tasks and three matched review cond
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next decision is whether to use the protocol's one bounded capture redesign under a new instrument version or pivot to simpler post-hoc evidence generation. Do not begin the formative self-study unless a future repeated Gate 1 passes.
+Only one reviewer is currently available. The immediate next step is the pre-registered Instrument v2 diagnostic iteration: a versioned closure-reliability check and one artificial trajectory positive control. This diagnostic will not reopen reviewer sessions or count as evidence of natural runtime benefit.
 
 ## What exists
 
