@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "generator": {
+    "provider": "provider-name",
+    "model": "model-name",
+    "prompt_version": "artifact-pipeline-v1",
+    "settings": {}
+  },
+  "steps": {
+    "current_state": { "input_tokens": null, "output_tokens": null, "wall_time_ms": null, "retries": 0, "failure_codes": [] },
+    "post_hoc": { "input_tokens": null, "output_tokens": null, "wall_time_ms": null, "retries": 0, "failure_codes": [] },
+    "runtime": { "input_tokens": null, "output_tokens": null, "wall_time_ms": null, "retries": 0, "failure_codes": [] }
+  }
+}

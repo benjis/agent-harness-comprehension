@@ -233,63 +233,6 @@ module ComprehensionStudy
     end
   end
 
-  class GuideRegistrar
-    MAX_WORDS = 750
-    MATCH_TOLERANCE = 0.10
-
-    def attach(run:, post_hoc:, runtime:, current_state:)
-      record_path = File.join(run, "run.json")
-      record = JsonFile.read(record_path)
-      unless record.fetch("trial_status") == "awaiting-guides"
-        raise ArgumentError, "run must be awaiting guides"
-      end
-
-      inputs = { "post_hoc" => post_hoc, "runtime" => runtime, "current_state" => current_state }
-      inputs.each do |name, path|
-        raise ArgumentError, "#{name} file does not exist" unless File.file?(path)
-      end
-      JsonFile.read(current_state)
-
-      post_words = prose_words(post_hoc)
-      runtime_words = prose_words(runtime)
-      raise ArgumentError, "post-hoc guide exceeds #{MAX_WORDS} words" if post_words > MAX_WORDS
-      raise ArgumentError, "runtime guide exceeds #{MAX_WORDS} words" if runtime_words > MAX_WORDS
-      longer = [post_words, runtime_words].max
-      shorter = [post_words, runtime_words].min
-      raise ArgumentError, "guides must not be empty" if shorter.zero?
-      raise ArgumentError, "guide lengths differ by more than 10%" if (longer - shorter).fdiv(longer) > MATCH_TOLERANCE
-      raise ArgumentError, "guide headings do not match" unless headings(post_hoc) == headings(runtime)
-
-      guides = File.join(run, "guides")
-      FileUtils.mkdir_p(File.join(guides, "post_hoc"))
-      FileUtils.mkdir_p(File.join(guides, "runtime"))
-      FileUtils.cp(post_hoc, File.join(guides, "post_hoc", "review-guide.md"))
-      FileUtils.cp(runtime, File.join(guides, "runtime", "review-guide.md"))
-      FileUtils.mkdir_p(File.join(run, "research"))
-      FileUtils.cp(current_state, File.join(run, "research", "current-state.json"))
-
-      record["guides"] = {
-        "post_hoc_words" => post_words,
-        "runtime_words" => runtime_words,
-        "length_difference_percent" => (((longer - shorter).fdiv(longer)) * 100).round(2)
-      }
-      record["trial_status"] = "eligible"
-      JsonFile.write(record_path, record)
-      record
-    end
-
-    private
-
-    def prose_words(path)
-      File.readlines(path).reject { |line| line.lstrip.start_with?("#") }
-        .join.scan(/[[:alnum:]][[:alnum:]'’-]*/).length
-    end
-
-    def headings(path)
-      File.readlines(path).select { |line| line.start_with?("#") }.map(&:strip)
-    end
-  end
-
   class PacketBuilder
     COMMON_MATERIALS = %w[TASK.md diff.patch visible-tests.txt repository].freeze
 
@@ -570,3 +513,5 @@ module ComprehensionStudy
     end
   end
 end
+
+require_relative "artifact_pipeline"

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "small-validation",
+  "claims": [
+    {
+      "claim_id": "cur-001",
+      "final_state_support": "supported",
+      "runtime_support": "not-present",
+      "recoverability": "post-hoc-recoverable",
+      "decision_relevance": "contextual",
+      "target_outcome": "architecture",
+      "severity_if_wrong": "medium"
+    }
+  ],
+  "instrument": {
+    "duplicate_semantic_event_rate": 0.0,
+    "generic_semantic_event_rate": 0.0,
+    "capture_failures": [],
+    "renderer_failures": [],
+    "prohibited_data_findings": [],
+    "unaccounted_failures": [],
+    "added_tool_calls": null,
+    "added_turns": null,
+    "capture_tokens": null,
+    "capture_wall_time_ms": null,
+    "storage_bytes": 0
+  }
+}

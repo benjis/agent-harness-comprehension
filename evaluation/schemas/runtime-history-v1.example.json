@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "small-validation",
+  "condition": "runtime",
+  "claims": [
+    {
+      "id": "run-001",
+      "summary": "Example runtime-supported decision.",
+      "status": "current",
+      "evidence": [
+        { "source": "runtime:sem-example", "locator": "decision checkpoint" }
+      ]
+    }
+  ]
+}

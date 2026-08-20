@@ -19,13 +19,22 @@ module StudyCli
       print_json ComprehensionStudy::RunImporter.new.import(
         task_id: task_id, workspace: workspace, ledger: ledger, output: output
       )
-    when "attach-guides"
-      run_dir, post_hoc, runtime, current_state = exact!(
-        arguments, 4, "attach-guides RUN_DIR POST_HOC_GUIDE RUNTIME_GUIDE CURRENT_STATE_JSON"
+    when "register-artifacts"
+      run_dir, current_state, post_hoc, runtime, generation = exact!(
+        arguments, 5,
+        "register-artifacts RUN_DIR CURRENT_STATE_JSON POST_HOC_HISTORY_JSON RUNTIME_HISTORY_JSON GENERATION_METADATA_JSON"
       )
-      print_json ComprehensionStudy::GuideRegistrar.new.attach(
-        run: run_dir, post_hoc: post_hoc, runtime: runtime, current_state: current_state
+      print_json ComprehensionStudy::ArtifactPipeline.new.register(
+        run: run_dir, current_state: current_state, post_hoc: post_hoc, runtime: runtime, generation: generation
       )
+    when "audit-run"
+      run_dir, audit = exact!(arguments, 2, "audit-run RUN_DIR AUDIT_JSON")
+      print_json ComprehensionStudy::ClaimAuditor.new.register(run: run_dir, audit: audit)
+    when "gate"
+      raise ArgumentError, "usage: gate OUTPUT_JSON RUN_DIR RUN_DIR RUN_DIR" unless arguments.length == 4
+
+      destination = arguments.shift
+      print_json ComprehensionStudy::FormativeGate.new.evaluate(runs: arguments, destination: destination)
     when "formative"
       raise ArgumentError, "usage: formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR" unless arguments.length == 5
 
@@ -82,7 +91,9 @@ module StudyCli
 
       study prepare TASK_ID WORKSPACE
       study import-run TASK_ID WORKSPACE LEDGER_OR_DASH RUN_DIR
-      study attach-guides RUN_DIR POST_HOC_GUIDE RUNTIME_GUIDE CURRENT_STATE_JSON
+      study register-artifacts RUN_DIR CURRENT_STATE_JSON POST_HOC_HISTORY_JSON RUNTIME_HISTORY_JSON GENERATION_METADATA_JSON
+      study audit-run RUN_DIR AUDIT_JSON
+      study gate OUTPUT_JSON RUN_DIR RUN_DIR RUN_DIR
       study formative STUDY_DIR REVIEWER RUN_DIR RUN_DIR RUN_DIR
       study review-start PACKET REVIEWER SESSION_JSON
       study review-open SESSION_JSON PACKET_RELATIVE_PATH

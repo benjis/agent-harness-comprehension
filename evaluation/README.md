@@ -38,19 +38,42 @@ evaluation/bin/study import-run \
 
 The importer copies the final repository, includes tracked and untracked changes in `diff.patch`, runs visible and hidden tests on copies, and keeps the ledger under the researcher-only `research/` directory.
 
-## Attach matched guides
+## Register structured artifacts
 
-Generate the guides according to the protocol, then register exactly one valid pair:
+Use the versioned prompts in `prompts/` to produce one current-state document, separate P/R history documents, and generation metadata. The example contracts are in `schemas/`. Register them once:
 
 ```sh
-evaluation/bin/study attach-guides \
+evaluation/bin/study register-artifacts \
   /absolute/path/to/runs/small \
-  /absolute/path/to/post-hoc-review-guide.md \
-  /absolute/path/to/runtime-review-guide.md \
-  /absolute/path/to/current-state.json
+  /absolute/path/to/current-state.json \
+  /absolute/path/to/post-hoc-history.json \
+  /absolute/path/to/runtime-history.json \
+  /absolute/path/to/generation-metadata.json
 ```
 
-The command checks the shared headings, 750-word cap, and 10% length tolerance. It does not generate or manually repair guide content.
+The command validates evidence paths and runtime event IDs, records canonical artifact, evidence, ledger, and prompt hashes, and deterministically renders both guides from the same current-state model. It enforces the 750-word cap and 10% length tolerance. Generated prose cannot be manually attached or regenerated after registration.
+
+## Audit claims and evaluate Gate 1
+
+Audit every generated claim with the versioned audit prompt, then register the complete audit:
+
+```sh
+evaluation/bin/study audit-run \
+  /absolute/path/to/runs/small \
+  /absolute/path/to/small-claim-audit.json
+```
+
+After all three audits are complete, evaluate the pre-registered gate:
+
+```sh
+evaluation/bin/study gate \
+  /absolute/path/to/gate-1.json \
+  /absolute/path/to/runs/small \
+  /absolute/path/to/runs/medium \
+  /absolute/path/to/runs/nontrivial
+```
+
+The gate requires one small, medium, and non-trivial run. It rechecks artifact, evidence, ledger, prompt, and rendered-guide integrity, then checks runtime-unique relevance, current-state accuracy, semantic closure, matching, privacy, and failure accounting. Only a passing report changes the three runs to `eligible`; packet construction refuses every earlier state.
 
 ## Build the one-reviewer assignment
 

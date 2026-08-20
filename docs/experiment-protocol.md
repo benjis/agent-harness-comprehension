@@ -585,10 +585,10 @@ Stage 2, only after Gate 1:
 
 ## Immediate implementation order
 
-1. Verify the migrated ParcelFlow assets and harness-neutral three-condition runner.
-2. Finalize the frozen Pi run manifest and evidence cut around the first imported run.
-3. Implement matched P and R guide generation and claim-audit output.
-4. Rehearse `small-validation` end to end.
-5. Run the medium and non-trivial Stage 1 trials.
-6. Evaluate Gate 1 before reviewing the masked packets or hardening the Pi extension further.
-7. Complete the three single-reviewer sessions and publish a formative, non-causal report.
+The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
+
+1. Rehearse `small-validation` end to end with Artifact Pipeline v1.
+2. Run the medium and non-trivial Stage 1 trials.
+3. Generate each artifact set once, audit every claim, and retain failures and costs.
+4. Evaluate Gate 1 before reviewing the masked packets or hardening the Pi extension further.
+5. Complete the three single-reviewer sessions only after a passing gate and publish a formative, non-causal report.

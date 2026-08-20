@@ -94,7 +94,10 @@ completed workspace + session ledger
  frozen run directory
  task + repository + diff + visible tests
  researcher-only ledger + hidden tests
-           │ register matched guides
+           │ validate artifacts + render matched guides
+           ▼
+ claim audit + three-run Gate 1
+           │ pass only
            ▼
  O / P / R review packets
            │ condition-masked review
@@ -102,12 +105,13 @@ completed workspace + session ledger
  formative session and score records
 ```
 
-`evaluation/lib/comprehension_study.rb` owns this boundary:
+The classes under `evaluation/lib/` own this boundary:
 
 - `ProjectFactory` creates a clean, committed task baseline without private rubrics or hidden tests.
 - `RunImporter` resolves the fixture's root commit as the baseline, captures committed and untracked changes, excludes `.git`, `.pi`, and `.comprehension` from reviewer source, fingerprints the source before and after import, and rejects drift.
 - Visible and hidden tests run on separate copies of the frozen repository. Hidden results remain researcher-only and do not determine trial eligibility.
-- `GuideRegistrar` requires matching headings, a 750-word cap, a 10% length tolerance, and a parseable shared current-state model before marking a run eligible.
+- `ArtifactPipeline` validates versioned current-state, P-history, R-history, and generation-metadata contracts. It checks cited final files and runtime event IDs, records provenance hashes and costs, and deterministically renders both guides from one shared current-state model.
+- `ClaimAuditor` requires an audit row for every generated claim. `FormativeGate` re-derives provenance hashes and both guides, evaluates one small, medium, and non-trivial run together, and is the only component that can mark those runs eligible.
 - `PacketBuilder` gives every condition the same task, repository, diff, and visible tests. P and R each receive one identically named `review-guide.md`; O receives no guide.
 - `FormativeAssignmentBuilder`, `ReviewSession`, and `ResultAnalyzer` record the current one-reviewer workflow and explicitly prevent a causal or release decision.
 
@@ -144,5 +148,6 @@ The semantic tool instructions also prohibit those contents. This is a design bo
 - Retention, redaction, migrations, integrity checks, and multi-harness schemas remain future work.
 - The Pi adapter demonstrates feasibility, not harness portability.
 - Import-time fingerprints detect local source drift during the evidence cut but do not control remote writers or prove general task settlement.
-- Matched P/R guide generation and claim-level audit are protocol requirements but are not yet automated; the current harness validates and registers externally generated guides.
+- Artifact content still depends on an external model invocation; the harness validates structured outputs and renders Markdown but does not call a model provider.
+- Claim support classifications are researcher-produced inputs. The harness enforces completeness and the pre-registered gate logic, not the truth of the auditor's judgment.
 - The current evaluation has one reviewer and produces formative case evidence only.

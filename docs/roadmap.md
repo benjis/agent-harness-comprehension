@@ -1,6 +1,6 @@
 # Roadmap
 
-The project is in **mechanism-discrimination preparation**. Engineering work is gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
+The project is in **Gate 1 trial production**. Engineering work is gated by evidence that runtime semantic checkpoints add reliable information beyond a matched post-hoc guide.
 
 ## Completed foundation
 
@@ -13,6 +13,8 @@ The project is in **mechanism-discrimination preparation**. Engineering work is 
 - Migrated ParcelFlow fixture, three tasks, private rubrics, hidden tests, and templates.
 - DSH-independent Ruby evaluation harness for Pi run import, repository freezing, visible/hidden verification, matched packet construction, single-reviewer session recording, and formative analysis.
 - Operational three-condition protocol with explicit artifact and interpretation gates.
+- Versioned structured current-state, P-history, R-history, generation-metadata, and claim-audit contracts.
+- Deterministic matched-guide rendering with evidence provenance, cost capture, length checks, and a three-run eligibility gate.
 
 No controlled human-comprehension benefit has been established.
 
@@ -20,11 +22,11 @@ No controlled human-comprehension benefit has been established.
 
 Current work:
 
-1. Define a versioned shared current-state model and matched P/R guide-generation inputs.
-2. Implement claim-level audit output and generation-cost capture.
-3. Rehearse `small-validation` end to end.
-4. Run frozen Pi implementations for `medium-atomic-reservation` and `nontrivial-idempotent-dispatch`.
-5. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
+1. Rehearse `small-validation` end to end with the implemented artifact and audit contracts.
+2. Run frozen Pi implementations for `medium-atomic-reservation` and `nontrivial-idempotent-dispatch`.
+3. Generate the structured artifacts once per run and retain all declared failures and costs.
+4. Classify every guide claim for final-state support, runtime support, recoverability, decision relevance, target outcome, and severity.
+5. Run the implemented three-run gate before opening any reviewer packet.
 
 Exit only if:
 

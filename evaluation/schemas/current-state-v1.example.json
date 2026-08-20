@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "small-validation",
+  "claims": [
+    {
+      "id": "cur-001",
+      "section": "change",
+      "summary": "Example final-state claim.",
+      "evidence": [
+        { "source": "diff.patch", "locator": "changed method" }
+      ]
+    },
+    {
+      "id": "cur-002",
+      "section": "flow",
+      "summary": "Example control-flow claim.",
+      "evidence": [
+        { "source": "diff.patch", "locator": "changed call path" }
+      ]
+    },
+    {
+      "id": "cur-003",
+      "section": "invariants",
+      "summary": "Example invariant claim.",
+      "evidence": [
+        { "source": "visible-tests.txt", "locator": "relevant test result" }
+      ]
+    },
+    {
+      "id": "cur-004",
+      "section": "impact",
+      "summary": "Example impact claim.",
+      "evidence": [
+        { "source": "diff.patch", "locator": "affected code" }
+      ]
+    },
+    {
+      "id": "cur-005",
+      "section": "validation",
+      "summary": "Example validation claim.",
+      "evidence": [
+        { "source": "visible-tests.txt", "locator": "test summary" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "small-validation",
+  "condition": "post_hoc",
+  "claims": [
+    {
+      "id": "post-001",
+      "summary": "Example recoverable decision.",
+      "status": "current",
+      "evidence": [
+        { "source": "diff.patch", "locator": "selected implementation" }
+      ]
+    }
+  ]
+}
