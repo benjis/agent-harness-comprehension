@@ -41,16 +41,20 @@ Gate 1 is closed as failed. Its required exit conditions were not met:
 
 The bounded natural-prevalence redesign allowance has been consumed. Do not add more natural runtime tasks or capture tuning. The separately pre-registered hybrid pilot below permits only its two controlled conditional-value tasks.
 
-## Next gate: hybrid conditional-value formative workflow
+## Active gate: hybrid conditional-value formative workflow
 
-Before any reviewer session:
+Completed before reviewer access:
 
-- complete the two pre-registered controlled non-trivial runs without closure or reruns;
-- generate a final-state base for both and exactly one audited runtime-unique trajectory claim per run;
-- pass the hybrid artifact, privacy, matching, and claim-integrity gate;
-- deterministically assign one post-hoc and one hybrid packet and freeze the researcher key;
-- exclude raw runtime ledgers, intervention prompts, hidden tests, private rubrics, and researcher keys from reviewer packets;
-- include the audited trajectory only in the hybrid guide, without exposing the intervention;
+- both pre-registered controlled non-trivial runs completed without closure or implementation reruns;
+- each final-state base and exhaustive audit passed, with exactly one runtime-unique trajectory claim per run;
+- the hybrid artifact, privacy, matching, and claim-integrity gate passed every check;
+- seed `20260820` assigned one post-hoc and one hybrid packet and froze the researcher key;
+- public packet order is `P02` then `P01`; neither packet contains raw ledgers, intervention prompts, hidden tests, private rubrics, or the key;
+- all preparation failures and costs are retained in the external run record.
+
+Next:
+
+- start `P02` only after the user explicitly begins the reviewer workflow;
 - complete the user-started condition-masked review sessions only after both packets pass integrity;
 - freeze answers and initial scores before opening the researcher key;
 - report timing, files opened, correctness, confidence, cognitive load, artifact defects, and protocol deviations;

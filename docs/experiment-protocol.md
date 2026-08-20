@@ -664,6 +664,10 @@ The single reviewer completes each task once. Freeze answers, time, files opened
 
 Stop after the two packets and two user-started sessions. Do not add tasks, swap conditions, regenerate guides, or rerun implementations after outcomes. A promising hybrid case may justify a later multi-reviewer study; a non-useful or misleading addendum leaves post-hoc as the default product and runtime as optional research telemetry.
 
+Result recorded on 2026-08-20 before reviewer access: both one-attempt implementations produced the pre-registered hypothesis, visible failure, and superseding revision; visible and hidden tests passed; both nine-claim audits passed integrity; every current-state claim was supported; every post-hoc claim was post-hoc-recoverable; and each `run-001` was audited as an observed, runtime-unique, relevant trajectory not verifiable from final-state evidence. The aggregate hybrid gate passed every check and froze one post-hoc and one hybrid packet under seed `20260820`, with public order `P02` then `P01`. No reviewer session has started and the condition key remains closed.
+
+All costs and failures remain in the external research record. Across implementation, artifact generation, and claim audit, the pilot used 40 reported model calls, 228,818 reported tokens, about 378 seconds of model wall time, and about US$0.4683. The runtime-capture subset used 7 semantic tool calls/turns, 30,166 attributable tokens, about 40.6 seconds, and 48,283 bytes. Rollback artifact generation required two recorded context-format retries; both first claim audits required one enum-policy retry; three no-model-cost researcher verification commands failed before corrected read-only calculations. No implementation was rerun, no generated guide was modified after registration, and no failure was silently excluded.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -674,4 +678,5 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 4. Completed: the formal three-run Artifact Pipeline v1 gate failed. Reviewer packets and sessions remain blocked.
 5. Completed on 2026-08-20: the one bounded Instrument v2 diagnostic passed both artificial capability gates without a rerun. It remains non-eligible and did not begin a reviewer session.
 6. Completed on 2026-08-20: natural phase 1 was valid but contained no runtime information increment, so the pre-registered stop rule selected the post-hoc pivot and prevented phase 2.
-7. Selected on 2026-08-20: execute the hybrid conditional-value pilot above. Do not start reviewer sessions until both controlled runs, audits, gate, assignment, and packets are frozen.
+7. Completed on 2026-08-20: both hybrid controlled runs, audits, gate, assignment, and packets were frozen; all gate checks passed.
+8. Next: the user explicitly starts the `P02` reviewer session. Do not open the researcher key or start `P01` early.

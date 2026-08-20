@@ -4,7 +4,7 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: hybrid conditional-value pilot pre-registered.** Natural runtime prevalence remained low and the fail-fast gate stopped, but runtime and post-hoc are now treated as complementary: every run gets a final-state base, while one controlled pilot condition receives an audited runtime-unique addendum. Reviewer sessions remain blocked until two fresh runs and packets are frozen.
+> **Current status: hybrid conditional-value packets frozen; reviewer not started.** Both controlled runs, exhaustive audits, and the hybrid gate passed. One masked post-hoc packet and one masked hybrid packet are ready in frozen public order `P02` then `P01`. The next action is the user's explicit start of the first reviewer session; no session has begun.
 
 ## Current research step
 
@@ -18,7 +18,7 @@ The superseded runtime study used three matched conditions:
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. The immediate next step is to prepare two condition-masked pilot packets: one post-hoc base and one post-hoc base with a runtime-unique addendum. The two controlled trajectories test conditional usability only, not natural occurrence. Do not begin reviewer sessions until both packets are frozen.
+Only one reviewer is currently available. Two condition-masked pilot packets are now frozen: one post-hoc base and one post-hoc base with a runtime-unique addendum. The two controlled trajectories test conditional usability only, not natural occurrence. Start `P02` only when the user explicitly begins the reviewer workflow; keep the researcher key closed until both answers and initial scores are frozen.
 
 ## What exists
 
