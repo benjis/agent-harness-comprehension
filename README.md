@@ -4,13 +4,13 @@ An experimental comprehension layer for coding agents. It records small, structu
 
 The project investigates **comprehension debt**: the gap between how quickly software can be changed by an agent and how quickly a human can build an accurate, usable model of that change.
 
-> **Current status: hybrid reviewer workflow stopped at P02.** The artifact gate passed, but the first masked review timed out and ended without a reliable review decision because chat-mediated file access prevented persistent navigation and side-by-side source comparison. P01 was not started and the researcher key remains closed.
+> **Current status: the human-comprehension experiment is incomplete and paused.** The artifact gate passed, but the first masked review timed out and ended without a reliable review decision because chat-mediated file access prevented persistent navigation and side-by-side source comparison. P01 was not started, the researcher key remains closed, and no condition-level or efficacy result was produced.
 
-## Current research step
+## Current direction
 
-The immediate question now separates prevalence from conditional value:
+The research prototype and frozen external runs remain a record of feasibility, negative prevalence results, controlled trajectory capture, cost, and reviewer-workflow failure. They do not establish that runtime or post-hoc artifacts improve human comprehension.
 
-> When a verifiable trajectory exists, does adding its audited runtime history to a revision-pinned post-hoc guide improve reviewer understanding enough to justify the extra reading and capture cost?
+The immediate work has moved to product iteration in the separate Agentic Survivor Skills repository. Its `comprehension-sync` skill keeps a human and coding agent aligned during real changes through thin slices, consequential-decision pauses, direct source access, and mental-model handoffs. This direction was motivated by the formative failure observed here; it is not a validated treatment result.
 
 The superseded runtime study used three matched conditions:
 
@@ -18,7 +18,7 @@ The superseded runtime study used three matched conditions:
 - a post-hoc guide generated only from frozen final-state evidence;
 - a runtime-enhanced guide using the same final-state model plus eligible semantic checkpoints.
 
-Only one reviewer is currently available. P02 opened 9 files, elapsed 1,420 seconds, hit the 1,200-second cap, recorded cognitive load 7/7, and produced no reliable approve/reject decision. This is a workflow result, not evidence for either masked condition. Do not start P01 or open the researcher key under the current interface.
+Only one reviewer is currently available. P02 opened 9 files, elapsed 1,420 seconds, hit the 1,200-second cap, recorded cognitive load 7/7, and produced no reliable approve/reject decision. This is a workflow result, not evidence for either masked condition. Do not start P01, open the researcher key, or treat the frozen packets as fresh observations. Any future human study requires a separately pre-registered protocol with normal persistent source navigation.
 
 ## What exists
 
@@ -77,9 +77,9 @@ See the [evaluation guide](evaluation/README.md) before preparing a real task wo
 
 ## Experimental lineage
 
-The work began with Agentic Survivor, a post-hoc skill for revision-pinned code-reading editions. That experiment established useful evidence discipline but could not reliably recover failed paths or causal revisions from final code alone. Later DeepSeek Harness experiments explored a post-settlement evidence package. The current Pi prototype isolates the execution-time capture hypothesis with a smaller event ledger.
+The work began with Agentic Survivor's revision-pinned Code Reading skill. That work established useful evidence discipline but could not reliably recover failed paths or causal revisions from final code alone. Later DeepSeek Harness experiments explored a post-settlement evidence package, and the Pi prototype isolated the execution-time capture hypothesis with a smaller event ledger. Agentic Survivor now also contains Comprehension Sync, a live human-agent collaboration workflow informed by this project's formative observations.
 
-These predecessors explain the research direction; neither is a runtime dependency of this repository.
+These related projects explain the product and research lineage; none is a runtime dependency of this repository, and the existence of the new skill does not complete this experiment.
 
 ## Contributing
 

@@ -4,17 +4,19 @@
 
 Coding agents can shorten the time required to produce a working change. They do not automatically shorten the time required for a human to understand, verify, maintain, and safely extend that change. This project calls the accumulating gap **comprehension debt**.
 
-The project initially tested whether a small comprehension layer inside an agent harness could preserve decision-relevant evidence during execution and later render a more useful mental model than a developer could obtain from final-state evidence alone. The artificial diagnostic established capture capability, but repeated natural runs produced no reliable runtime information increment. The active research direction now pivots to revision-pinned post-hoc guides generated only from frozen tasks, code, diffs, and tests.
+The project tested whether a small comprehension layer inside an agent harness could preserve decision-relevant evidence during execution and later render a more useful mental model than a developer could obtain from final-state evidence alone. The artificial diagnostic established capture capability, repeated natural runs produced no reliable runtime information increment, and a controlled hybrid prerequisite produced auditable trajectory evidence. The intended human review did not complete because its chat-mediated file interface failed before a reliable decision was possible.
 
-The hypothesis is unproven. The artifact may be redundant, noisy, costly, incomplete, or misleading. Those are first-class possible results.
+The hypothesis remains unproven and the research experiment is paused. The artifact may be redundant, noisy, costly, incomplete, or misleading. Those are first-class possible results. Current work has moved to iterative product development of Agentic Survivor's `comprehension-sync` workflow; that product response is informed by the formative observations here but is not efficacy evidence.
 
 ## Project lineage
 
-The first approach to this problem was Agentic Survivor, a skill that reconstructs a compressed mental model from observable artifacts after implementation. It demonstrated the value of organizing explanations around constraints, causal decisions, invariants, and executable paths rather than producing a file summary.
+The first approach to this problem was Agentic Survivor's Code Reading skill, which reconstructs a compressed mental model from observable artifacts after implementation. It demonstrated the value of organizing explanations around constraints, causal decisions, invariants, and executable paths rather than producing a file summary.
 
 It also revealed a limit of the skill layer. By the time post-hoc reconstruction begins, failed attempts and revised hypotheses may have left little reliable evidence in the final code. The skill can infer a plausible rationale, but inference is not the same as preserving the causal transition when it happens.
 
-That limitation motivated harness-level experiments: first with DeepSeek Harness, and now with Pi. The current Pi prototype uses native lifecycle and extension hooks to capture typed checkpoints as a first-class session artifact. These implementations are experiments around one research question, not evidence that harness-level capture is already superior.
+That limitation motivated harness-level experiments: first with DeepSeek Harness, and then with Pi. The Pi prototype uses native lifecycle and extension hooks to capture typed checkpoints as a first-class session artifact. These implementations are experiments around one research question, not evidence that harness-level capture is superior.
+
+The failed reviewer workflow exposed a second problem: a human can approve repeated next steps while summaries and serial file access fail to maintain a usable model of what the agent is building. Agentic Survivor's newer Comprehension Sync skill addresses that product problem during implementation through thin slices, decision pauses, direct source access, and mental-model handoffs. It is a separate product iteration, not a completed condition in this study.
 
 ## Problem: comprehension debt
 
@@ -77,7 +79,7 @@ The current investigation covers:
 
 The first adapter targets Pi. The research question is harness-agnostic, but portability has not been demonstrated.
 
-No further natural-prevalence runs are planned under the current research decision. Exactly two controlled runtime-rich runs are allowed for the pre-registered conditional-value pilot. The active product shape is a revision-pinned post-hoc base with an optional audited runtime addendum.
+No further natural-prevalence or hybrid reviewer runs are planned under the paused protocol. The two controlled runtime-rich runs and frozen packets remain part of the incomplete conditional-value pilot, but P01 must not be started and the condition key remains closed. Current product iteration occurs in the separate Agentic Survivor Skills repository and does not add observations to this experiment.
 
 ## Non-goals
 
@@ -133,4 +135,4 @@ The evidence establishes feasibility, not human benefit:
 - the first masked hybrid-pilot review failed at the workflow layer before conditional utility could be assessed: P02 opened 9 files, elapsed 1,420 seconds, timed out at the 1,200-second cap, recorded cognitive load 7/7, and ended without a reliable review decision because serial chat file access prevented persistent navigation and side-by-side comparison; P01 was not started and the condition key remains closed; four no-model-cost researcher command failures are also retained in the external record;
 - no human-comprehension treatment effect has been measured, and the current single-reviewer study cannot estimate one.
 
-The natural runtime-prevalence claim remains stopped. The hybrid prerequisite establishes that controlled trajectory evidence can survive the artifact and privacy gates, but the current chat-mediated reviewer workflow is unusable and yielded no conditional-value evidence. The next research step, if pursued, is a separately pre-registered interface redesign that preserves normal source navigation; these packets cannot be reused as fresh observations. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).
+The natural runtime-prevalence claim remains stopped. The hybrid prerequisite establishes that controlled trajectory evidence can survive the artifact and privacy gates, but the current chat-mediated reviewer workflow is unusable and yielded no conditional-value evidence. The experiment is therefore incomplete and paused, not resolved in favor of either condition. Current work moves to real-world iteration of Comprehension Sync. If research resumes, it requires a separately pre-registered interface and task protocol that preserves normal source navigation; these packets cannot be reused as fresh observations. See the [experiment protocol](experiment-protocol.md) and [roadmap](roadmap.md).

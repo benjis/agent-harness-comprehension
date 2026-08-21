@@ -4,12 +4,12 @@ This directory contains the self-contained Ruby evaluation assets for [`docs/exp
 
 ## Study boundary
 
-The current setup has one reviewer. It is a formative self-study: it can validate packet generation, timing, scoring, artifact defects, and individual cases, but it cannot estimate a causal treatment effect. The active hybrid pilot reviews two controlled tasks once each:
+The setup has one reviewer and is retained as an incomplete formative self-study. It can reproduce packet generation, timing, scoring, artifact defects, and individual cases, but it cannot estimate a causal treatment effect. The stopped hybrid pilot was designed to review two controlled tasks once each:
 
 - `post_hoc` — ordinary materials plus a final-evidence-only guide;
 - `hybrid` — the same final-state guide shape with one audited runtime-unique trajectory substituted into its history section.
 
-The fixed seed assigns one task to each condition. The mapping remains hidden inside `researcher-key.json` until both review sessions and initial scores are complete. The older three-condition commands remain available only for the frozen Artifact Pipeline v1 record.
+The fixed seed assigned one task to each condition. P02 timed out without a reliable decision, P01 was not started, and the mapping remains hidden inside `researcher-key.json`. Do not continue the reviewer workflow or open the key. The commands below remain for reproducibility and harness maintenance, not as authorization to collect another observation under this protocol.
 
 ## Verify the harness
 

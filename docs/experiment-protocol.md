@@ -2,11 +2,11 @@
 
 ## Status
 
-Protocol version: 2, draft for the current research phase. This document defines an executable artifact-discrimination study followed by a single-reviewer formative self-study. A later multi-reviewer efficacy design is preserved separately below and is not the current procedure.
+Protocol version: 2, inactive after an incomplete single-reviewer pilot. This document preserves the executed artifact-discrimination work, the stopped reviewer procedure, and a possible later multi-reviewer design. It is not an active instruction to begin or continue reviewer sessions.
 
 The Pi extension is the primary treatment generator. DeepSeek Harness is not a study dependency. The ParcelFlow Ruby tasks, hidden tests, templates, and a rewritten harness-neutral study runner now live under `evaluation/` in this repository.
 
-Only one reviewer is currently available. The self-study can validate the protocol and produce case evidence, but it cannot estimate a causal treatment effect: reviewer, task, order, learning, and condition cannot all be separated with one observation per condition.
+Only one reviewer was available. P02 timed out under a chat-mediated file interface without a reliable review decision; P01 was never started and the condition key remains closed. The formative completion criteria were not met, no condition observation was obtained, and no causal or directional treatment conclusion is available.
 
 ## Decision this protocol must support
 
@@ -20,7 +20,7 @@ The protocol is not intended to prove that any summary helps. It separates three
 
 The second question is the primary research question. If runtime-enhanced and post-hoc guides perform equivalently, the execution-time hypothesis is not supported even if both outperform ordinary review.
 
-The current one-reviewer phase cannot answer those comparative questions causally. It tests their prerequisites: whether a reliable runtime information increment exists, whether the packets make that increment usable, and whether a later efficacy study is justified.
+The one-reviewer phase could not answer those comparative questions. Its artifact prerequisite passed under controlled trajectories, but the review workflow failed before packet usability or conditional value could be assessed. The decision this protocol was meant to support therefore remains unanswered.
 
 ## Hypotheses
 
@@ -583,6 +583,8 @@ Stage 2, only after Gate 1:
 - deviations and missing-data report;
 - a formative recommendation to continue investigating, narrow, pivot, or stop, without an efficacy claim.
 
+Stage 2 remains incomplete. Only the reproducible hybrid assignment and one unusable timed-out session record exist; completed review observations, masked scores, analysis, and a condition-level recommendation do not.
+
 ## Protocol amendment 1: Instrument v2 diagnostic iteration
 
 Status: pre-registered on 2026-08-20 after Artifact Pipeline v1 Gate 1 failed and before any Instrument v2 run. This amendment does not replace, pool with, or reinterpret the three failed v1 runs.
@@ -670,6 +672,18 @@ All costs and failures remain in the external research record. Across implementa
 
 Reviewer result recorded on 2026-08-20 with the condition key still closed: P02 opened 9 packet files and ended after 1,420 elapsed seconds, capped to 1,200 seconds with `timed_out: true`. The reviewer reported cognitive load 7/7 and no reliable approve/reject decision. The blocking defect was the review interface: serial chat-mediated file opening removed persistent source context, side-by-side comparison, and normal editor navigation; additional summaries increased abstraction rather than restoring code context. P01 was not started. Because the condition remains masked, this result cannot be attributed to post-hoc or runtime content. Stop the current reviewer workflow rather than expose the second packet to the same known interface failure.
 
+## Protocol amendment 4: incomplete-study pause and product iteration
+
+Status: recorded on 2026-08-21 after the reviewer stopped P02 and before P01 or the condition key was opened.
+
+The hybrid conditional-value experiment is incomplete and paused. The controlled runs establish that an audited runtime-unique trajectory can be placed into a matched packet, but the reviewer workflow produced no reliable comprehension, defect, impact, or approval response. It therefore supplies no evidence that either the post-hoc or hybrid guide helps, harms, or outperforms the other.
+
+Do not start P01, open the condition key, redesign the existing packets in place, or reuse P01/P02 as fresh observations. The frozen external runs remain a research record of feasibility, cost, negative natural prevalence, controlled capture, and interface failure.
+
+The immediate work moves outside this experiment to product iteration in the Agentic Survivor Skills repository. The `comprehension-sync` skill uses thin slices, consequential-decision pauses, direct source access, and mental-model handoffs to maintain human-agent alignment during real implementation work. Its use may generate product feedback, but it is not a continuation, condition, or positive result of this protocol.
+
+If human-comprehension research resumes, pre-register a new protocol before collecting reviewer outcomes. It must use fresh tasks or otherwise control prior exposure, preserve normal persistent editor navigation and side-by-side source/diff access, define what interaction is recorded, and retain the existing interpretation limits for a single reviewer.
+
 ## Immediate implementation order
 
 The migrated runner, frozen-run importer, versioned artifact contracts, deterministic matched-guide renderer, exhaustive claim-audit registration, generation-cost capture, and Gate 1 evaluator are implemented.
@@ -682,4 +696,5 @@ The migrated runner, frozen-run importer, versioned artifact contracts, determin
 6. Completed on 2026-08-20: natural phase 1 was valid but contained no runtime information increment, so the pre-registered stop rule selected the post-hoc pivot and prevented phase 2.
 7. Completed on 2026-08-20: both hybrid controlled runs, audits, gate, assignment, and packets were frozen; all gate checks passed.
 8. Stopped on 2026-08-20: P02 timed out with a blocking reviewer-interface failure and no review decision. P01 remains unopened and the condition key remains closed.
-9. Next: redesign the reviewer interface around normal persistent source navigation before pre-registering any new reviewer attempt; do not reuse these packets as fresh observations.
+9. Completed on 2026-08-21: mark the human-comprehension experiment incomplete and pause reviewer research without opening P01 or the condition key.
+10. Current product step, outside this protocol: dogfood and iterate Agentic Survivor's `comprehension-sync` skill on real changes. Any future reviewer experiment requires a fresh pre-registration and cannot reuse these packets as fresh observations.

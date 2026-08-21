@@ -1,6 +1,6 @@
 # Roadmap
 
-The project has **stopped the natural runtime-prevalence claim and selected a hybrid pilot**. Post-hoc final-state evidence is the default base; runtime is an optional audited addendum whose conditional reviewer value remains untested.
+The project has **stopped the natural runtime-prevalence claim and paused the incomplete hybrid reviewer experiment**. The controlled artifact prerequisite passed, but no reliable human-review observation was produced. Post-hoc versus runtime-enhanced comprehension remains unanswered.
 
 ## Completed foundation
 
@@ -41,7 +41,7 @@ Gate 1 is closed as failed. Its required exit conditions were not met:
 
 The bounded natural-prevalence redesign allowance has been consumed. Do not add more natural runtime tasks or capture tuning. The separately pre-registered hybrid pilot below permits only its two controlled conditional-value tasks.
 
-## Stopped gate: hybrid conditional-value formative workflow
+## Stopped and incomplete gate: hybrid conditional-value formative workflow
 
 Completed before reviewer access:
 
@@ -59,18 +59,31 @@ Observed reviewer stop:
 - serial chat access prevented persistent source context, side-by-side comparison, and normal editor navigation;
 - P01 was not started and the condition key remains closed, so the failure cannot be attributed to either masked content condition.
 
-Next:
+Research status:
 
 - do not continue P01 under the known-broken interface;
-- if reviewer work continues, pre-register a new interface protocol that records navigation without removing normal editor affordances;
+- keep the condition key closed because no valid comparison can be completed from this assignment;
+- if reviewer work continues later, pre-register a new interface protocol that records navigation without removing normal editor affordances;
 - do not reuse P02 or P01 as fresh observations after redesign;
 - report the current result as a formative workflow failure, not a treatment result.
 
 The output may justify another research iteration, narrow the capture mechanism, reveal a pivot, or expose a stop condition. It cannot establish that R outperforms P or O.
 
+## Current product direction
+
+Research execution is paused. Current work moves to the separate Agentic Survivor Skills repository and its `comprehension-sync` workflow:
+
+- establish a small shared model before a meaningful change;
+- work through one reviewable thin slice at a time;
+- pause only for consequential decisions that need human judgment;
+- keep normal source and diff navigation available;
+- hand off how the resulting system works, not only what files changed.
+
+This is product dogfooding and iterative design, not a continuation of the frozen study and not evidence that the workflow improves comprehension. Feedback may later motivate a smaller, separately pre-registered evaluation.
+
 ## Gate 3: efficacy study
 
-Only if Gates 1 and 2 are promising and independent reviewers become available:
+Not scheduled. Only if a new formative workflow succeeds and independent reviewers become available:
 
 - run the balanced multi-reviewer design in `experiment-protocol.md`;
 - pre-register practical effect and correctness margins;
@@ -79,7 +92,7 @@ Only if Gates 1 and 2 are promising and independent reviewers become available:
 
 ## Deferred engineering
 
-Do not prioritize these before the evidence gates require them:
+Do not prioritize these while research execution is paused:
 
 - full schema migrations and cross-process locking;
 - cross-harness adapters or a generalized ontology;
